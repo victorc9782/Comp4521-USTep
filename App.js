@@ -4,7 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-import { ProfileScreen } from './components/Profile/Profile'
+import { ProfileScreen } from './components/Profile/ProfileScreen'
+import {ChatScreen} from './components/Chat/ChatScreen'
+import { EventScreen } from './components/Event/EventScreen'
+import {NotificationScreen} from './components/Notification/NotificationScreen'
 import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 
 const instructions = Platform.select({
@@ -42,33 +45,6 @@ function HomeScreen({ navigation, route }) {
   );
 }
 
-function ChatScreen({ route, navigation }) {
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Chat Screen</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
-}
-function EventScreen({ route, navigation }) {
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Event Screen</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
-}
-function NotificationScreen({ route, navigation }) {
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Notification Screen</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
-}
 
 function CreatePostScreen({ navigation, route }) {
   const [postText, setPostText] = React.useState('');
