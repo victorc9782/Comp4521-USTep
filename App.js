@@ -4,14 +4,16 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { ProfileScreen } from './components/Profile/Profile'
+import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
 });
 
-function HomeScreen({navigation, route}) {
-  
+function HomeScreen({ navigation, route }) {
+
   React.useEffect(() => {
     if (route.params?.post) {
       // Post updated, do something with `route.params.post`
@@ -40,8 +42,8 @@ function HomeScreen({navigation, route}) {
   );
 }
 
-function ChatScreen({route, navigation}) {
-  
+function ChatScreen({ route, navigation }) {
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Chat Screen</Text>
@@ -49,8 +51,8 @@ function ChatScreen({route, navigation}) {
     </View>
   );
 }
-function EventScreen({route, navigation}) {
-  
+function EventScreen({ route, navigation }) {
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Event Screen</Text>
@@ -58,20 +60,11 @@ function EventScreen({route, navigation}) {
     </View>
   );
 }
-function NotificationScreen({route, navigation}) {
-  
+function NotificationScreen({ route, navigation }) {
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Notification Screen</Text>
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-    </View>
-  );
-}
-function ProfileScreen({route, navigation}) {
-  
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Profile Screen</Text>
       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
     </View>
   );
@@ -105,59 +98,59 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Tab.Navigator 
-        initialRouteName="Home"
-        tabBarOptions={{
-          activeTintColor: '#e91e63',
-        }}>
-          <Tab.Screen 
-            name="Home" 
-            component={HomeScreen} 
+        <Tab.Navigator
+          initialRouteName="Home"
+          tabBarOptions={{
+            activeTintColor: '#e91e63',
+          }}>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="home" color={color} size={size} />
               ),
             }}
           />
-          <Tab.Screen 
-            name="Chat" 
-            component={ChatScreen} 
+          <Tab.Screen
+            name="Chat"
+            component={ChatScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="forum-outline" color={color} size={size} />
               ),
             }}
           />
-          <Tab.Screen 
-            name="Event" 
-            component={EventScreen}  
+          <Tab.Screen
+            name="Event"
+            component={EventScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="calendar-text-outline" color={color} size={size} />
               ),
-            }} 
+            }}
           />
-          <Tab.Screen 
-            name="Notification" 
+          <Tab.Screen
+            name="Notification"
             component={NotificationScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="bell" color={color} size={size} />
               ),
-            }} 
+            }}
           />
-          <Tab.Screen 
-            name="Profile" 
-            component={ProfileScreen} 
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="account" color={color} size={size} />
               ),
-            }} 
+            }}
           />
-          <Tab.Screen 
-            name="CreatePost" 
-            component={CreatePostScreen} 
+          <Tab.Screen
+            name="CreatePost"
+            component={CreatePostScreen}
           />
         </Tab.Navigator>
       </NavigationContainer>
