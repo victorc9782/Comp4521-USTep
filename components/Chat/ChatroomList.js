@@ -4,57 +4,70 @@ import { ListItem } from 'react-native-elements';
 
   
 export default class ChatroomList extends Component {
+  constructor(props) {
+    super(props)
+  }
   state = {
     list : [
       {
         name: 'Amy Farha',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
+        subtitle: 'Vice President',
+        id: 1
       },
       {
         name: 'Chris Jackson',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
+        subtitle: 'Vice Chairman',
+        id: 2
       },
       {
         name: 'Amy Farha',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
+        subtitle: 'Vice President',
+        id: 3
       },
       {
         name: 'Chris Jackson',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
+        subtitle: 'Vice Chairman',
+        id: 4
       },
       {
         name: 'Amy Farha',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
+        subtitle: 'Vice President',
+        id: 5
       },
       {
         name: 'Chris Jackson',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
+        subtitle: 'Vice Chairman',
+        id: 6
       },
       {
         name: 'Amy Farha',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
+        subtitle: 'Vice President',
+        id: 7
       },
       {
         name: 'Chris Jackson',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
+        subtitle: 'Vice Chairman',
+        id: 8
       },
       {
         name: 'Amy Farha',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-        subtitle: 'Vice President'
+        subtitle: 'Vice President',
+        id: 9
       },
       {
         name: 'Chris Jackson',
         avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-        subtitle: 'Vice Chairman'
+        subtitle: 'Vice Chairman',
+        id: 10
       },
     ]
   }
@@ -67,6 +80,7 @@ export default class ChatroomList extends Component {
         leftAvatar={{ source: { uri: item.avatar_url } }}
         bottomDivider
         chevron
+        onPress={()=>{this.props.onClickChatRoomUser(item)}}
       />
     )
 
@@ -74,7 +88,7 @@ export default class ChatroomList extends Component {
     return (
         <FlatList
           keyExtractor={this.keyExtractor}
-          data={this.state.list}
+          data={this.props.chatList}
           renderItem={this.renderItem}
         />
     );
