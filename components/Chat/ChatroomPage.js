@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Button, Flatlist, ScrollView } from 'react-native'
 import { ListItem } from 'react-native-elements';
+import Chatroom from './Chatroom';
 
 export function ChatroomPage({ route, navigation }) {
   React.useEffect(() => {
@@ -20,6 +21,7 @@ export function ChatroomPage({ route, navigation }) {
           bottomDivider
           chevron
         />
+        <Chatroom/>
   
         <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
       </View>
