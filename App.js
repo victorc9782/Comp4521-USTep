@@ -5,7 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { ProfileScreen } from './components/Profile/ProfileScreen'
-import {ChatScreen} from './components/Chat/ChatScreen'
+import {ChatroomListPage} from './components/Chat/ChatroomListPage'
+import {ChatroomPage} from './components/Chat/ChatroomPage'
 import { EventScreen } from './components/Event/EventScreen'
 import {NotificationScreen} from './components/Notification/NotificationScreen'
 import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
@@ -44,7 +45,15 @@ function HomeScreen({ navigation, route }) {
     </View>
   );
 }
-
+function ChatScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="ChatroomList" component={ChatroomListPage} />
+      <Stack.Screen name="Chatroom" component={ChatroomPage} />
+    </Stack.Navigator>
+  );
+}
 
 function CreatePostScreen({ navigation, route }) {
   const [postText, setPostText] = React.useState('');
