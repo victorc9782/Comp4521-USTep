@@ -8,8 +8,8 @@ import { ProfileScreen } from './components/Profile/ProfileScreen'
 import {ChatroomListPage} from './components/Chat/ChatroomListPage'
 import {ChatroomPage} from './components/Chat/ChatroomPage'
 import { EventScreen } from './components/Event/EventScreen'
-import {NotificationScreen} from './components/Notification/NotificationScreen'
-import DrawerLayout from 'react-native-gesture-handler/DrawerLayout';
+import { NotificationScreen } from './components/Notification/NotificationScreen'
+import firebase from 'firebase';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -80,6 +80,7 @@ function CreatePostScreen({ navigation, route }) {
 const Tab = createBottomTabNavigator();
 
 export default class App extends Component {
+
   render() {
     return (
       <NavigationContainer>
