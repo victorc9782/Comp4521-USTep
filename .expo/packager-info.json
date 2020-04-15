@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://i3-332.anonymous.comp4521-ustep.exp.direct",
-  "packagerNgrokUrl": "https://packager.i3-332.anonymous.comp4521-ustep.exp.direct",
-  "ngrokPid": 1230,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 1849,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": 19006
 }
