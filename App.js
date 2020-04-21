@@ -5,11 +5,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import { ProfileScreen } from './components/Profile/ProfileScreen'
-import {ChatroomListPage} from './components/Chat/ChatroomListPage'
-import {ChatroomPage} from './components/Chat/ChatroomPage'
+import { ChatroomListPage } from './components/Chat/ChatroomListPage'
+import { ChatroomPage } from './components/Chat/ChatroomPage'
 import { EventScreen } from './components/Event/EventScreen'
 import { NotificationScreen } from './components/Notification/NotificationScreen'
 import firebase from 'firebase';
+
+import { ResultPage } from './components/Finding/ResultPage'
+import { MatchPage } from './components/Finding/MatchPage'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -51,6 +54,16 @@ function ChatScreen({ navigation, route }) {
     <Stack.Navigator>
       <Stack.Screen name="ChatroomList" component={ChatroomListPage} />
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
+    </Stack.Navigator>
+  );
+}
+
+function FindingScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Finding" component={MatchPage} />
+      <Stack.Screen name="FindingResult" component={ResultPage} />
     </Stack.Navigator>
   );
 }
@@ -137,6 +150,10 @@ export default class App extends Component {
           <Tab.Screen
             name="CreatePost"
             component={CreatePostScreen}
+          />
+          <Tab.Screen
+            name="Finding"
+            component={FindingScreen}
           />
         </Tab.Navigator>
       </NavigationContainer>

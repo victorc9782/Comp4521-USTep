@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
 
 export const ProfileScreen = ({ route, navigation }) => {
 
+    {route.params?.id}
+
     return (
         <ScrollView>
         <View style={styles.contentContainer}>
@@ -73,11 +75,11 @@ export const ProfileScreen = ({ route, navigation }) => {
             />
             <Image 
                 style={styles.icon} 
-                source={icon}
+                source={route.params?.icon}
                 resizeMode={'cover'}
             />
-            <Text style={styles.title}> {name} </Text>
-            <Text style={styles.description}> {description} </Text>
+            <Text style={styles.title}> {route.params?.name} </Text>
+            <Text style={styles.description}> {route.params?.description} </Text>
             <Text style={styles.audience}>{num_of_followers} followers | {num_of_views} views</Text>
             <View style={styles.buttonContainer}>
                 <Button
