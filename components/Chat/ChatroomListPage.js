@@ -10,22 +10,27 @@ import { db } from '../../config/config';
 function keyExtractor(item, index){
     return index.toString()
 }
-export function ChatroomListPage({ route, navigation }) {
-  let userInfo = []
-  
+export default function ChatroomListPage({ route, navigation}) {
+  /*
+  let localUserInfo = []
+  console.log("ChatroomListPage Read ref")
+  console.log(db.ref('/users'));
   db.ref('/users').once('value',  snap => {
     console.log(snap);
     snap.forEach(
         child => {
-          userInfo.push(child.val());
+          console.log(child.val());
+          localUserInfo.push(child.val());
         }
     )
   })
+  console.log("ChatroomListPage Read ref end")
+  */
     return (
       <SafeAreaView style={{  flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Chat Screen</Text>
         <ChatroomList 
-        chatList={userInfo} 
+        //chatList={localUserInfo} 
         onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item})}
         />
   
