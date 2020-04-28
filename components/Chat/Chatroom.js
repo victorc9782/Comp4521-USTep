@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { Text, View, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
+const windowWidth = Dimensions.get('window').width;
 export default class Chatroom extends Component {
   constructor(props) {
     super(props)
@@ -33,13 +34,16 @@ export default class Chatroom extends Component {
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-      />
+      <View style={{ flex: 1 }}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={messages => this.onSend(messages)}
+          user={{
+            _id: 1,
+          }}
+          textInputStyle={{width: windowWidth}}
+        />
+      </View>
     );
   }   
 } 

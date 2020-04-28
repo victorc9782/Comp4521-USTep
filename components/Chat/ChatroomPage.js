@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, Button, Flatlist, ScrollView } from 'react-native'
+import { SafeAreaView, Text, Button, Flatlist, ScrollView, Dimensions,KeyboardAvoidingView } from 'react-native'
 import { ListItem } from 'react-native-elements';
 import Chatroom from './Chatroom';
 
+const windowWidth = Dimensions.get('window').width;
 export function ChatroomPage({ route, navigation }) {
   React.useEffect(() => {
     if (route.params?.item) {
@@ -11,9 +12,7 @@ export function ChatroomPage({ route, navigation }) {
     }
   }, [route.params?.item]);
     return (
-      <View style={{  flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Chat room page</Text>
-        
+      <SafeAreaView style={{  flex: 1, alignItems: 'stretch', justifyContent: 'center', width: windowWidth }}>       
         <ListItem
           title={route.params?.item.name}
           subtitle={route.params?.item.subtitle}
@@ -21,10 +20,15 @@ export function ChatroomPage({ route, navigation }) {
           bottomDivider
           chevron
         />
-        <Chatroom/>
+        <Chatroom
+          ChatroomStyle={{width: windowWidth}}
+        />
   
+        {
+          Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />
+        }
         <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      </View>
+      </SafeAreaView>
       
     );
 }

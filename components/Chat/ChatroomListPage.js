@@ -11,7 +11,7 @@ function keyExtractor(item, index){
     return index.toString()
 }
 export default function ChatroomListPage({ route, navigation}) {
-  /*
+  
   let localUserInfo = []
   console.log("ChatroomListPage Read ref")
   console.log(db.ref('/users'));
@@ -25,12 +25,12 @@ export default function ChatroomListPage({ route, navigation}) {
     )
   })
   console.log("ChatroomListPage Read ref end")
-  */
+  
     return (
       <SafeAreaView style={{  flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>Chat Screen</Text>
         <ChatroomList 
-        //chatList={localUserInfo} 
+        chatList={localUserInfo} 
         onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item})}
         />
   

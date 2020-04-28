@@ -13,6 +13,9 @@ const initalState = {
   };
 
 const userInfo = (state = initalState, { type, payload })  =>{
+  console.log("userInfo")
+  console.log(state)
+
     switch (type) {
         case UPDATE_USERINFO: 
           return {

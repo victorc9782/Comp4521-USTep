@@ -10,6 +10,9 @@ const windowWidth = Dimensions.get('window').width;
 class ChatroomList extends Component {
   constructor(props) {
     super(props)
+    this.state={
+      userInfo: null
+    }
   }
     keyExtractor = (item, index) => index.toString()
     
@@ -23,17 +26,32 @@ class ChatroomList extends Component {
         onPress={()=>{this.props.onClickChatRoomUser(item)}}
       />
     )
+    async updateUserInfo(){
+      const {updateUserInfoHandler} = this.props;
+      let userInfo = []
+      console.log("Read /users");
+      console.log(db.ref('/users'));
+      await db.ref('/users').once('value',  snap => {
+          console.log(snap);
+          snap.forEach(
+              child => {
+              
+              userInfo.push(child.val());
+              }
+          )
+      })
+      this.setState({userInfo: userInfo})
+    }
   componentDidMount(){
-    console.log("ChatroomList componentDidUpdate()")
-    console.log(this.props.userInfoStore.userinfo)
+    //this.updateUserInfo()
   }
   render() {
     return (
       <SafeAreaView>
         <FlatList
           keyExtractor={this.keyExtractor}
-          //data={this.props.chatList}
-          data={this.props.userInfoStore.userinfo}
+          data={this.props.chatList}
+          //data={this.state.userinfo}
           renderItem={this.renderItem}
           style={{width:windowWidth}}
         />

@@ -85,12 +85,14 @@ class Main extends Component {
     console.log("Main.js componentDidUpdate after store")
     console.log(this.props.userInfoStore.userInfo)
   }
+  /*
   componentDidMount(){
-    if (this.props.userInfoStore.userInfo == null){
+    if (!this.props.userInfoStore.userInfo){
       this.updateUserInfo()
     }
     
   }
+  */
   render() {
     return (
         <NavigationContainer>
