@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
+
+import { db } from '../../config/config';
+
 const windowWidth = Dimensions.get('window').width;
 export default class Chatroom extends Component {
   constructor(props) {
@@ -11,6 +14,9 @@ export default class Chatroom extends Component {
   }
 
   componentDidMount() {
+    this.getChatRecord('001')
+    
+    /*
     this.setState({
       messages: [
         {
@@ -25,6 +31,39 @@ export default class Chatroom extends Component {
         },
       ],
     })
+    */
+  }
+  
+  async getChatRecord(chatroomId){
+    console.log("getChatRecord")
+    console.log(db.ref('/chatroom/'+'001'));
+    //console.log(new Date);
+    let messages = []
+    await db.ref('/chatroom/'+'001').once('value',  snap => {
+      console.log(snap);
+      snap.forEach(
+          child => {
+            let message = child.val();
+            //console.log(child.val());
+            let formattedMessage = {
+              _id: message._id,
+              text: message.text,
+              createdAt: new Date(message.createdAt),
+              user: {
+                _id: message.user._id,
+                name: 'React Native',
+                avatar: 'https://placeimg.com/140/140/any',
+              },
+            }
+            console.log(formattedMessage)
+            messages.push(formattedMessage)
+          }
+      )
+    })
+    console.log("getChatRecord End")
+    console.log(messages)
+    this.setState({messages: messages})
+
   }
   onSend(messages = []) {
     this.setState(previousState => ({
