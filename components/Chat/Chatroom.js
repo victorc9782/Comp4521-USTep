@@ -62,6 +62,7 @@ export default class Chatroom extends Component {
     })
     console.log("getChatRecord End")
     console.log(messages)
+    messages.reverse()
     this.setState({messages: messages})
 
   }
