@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-import { Provider, connect } from 'react-redux';
+//import { Provider, connect } from 'react-redux';
 import firebase from 'firebase';
 //import createSagaMiddleware from 'redux-saga';
 
@@ -174,13 +174,4 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
-export default connect(
-    state => ({ 
-      userInfoStore: state.userInfo 
-    }),
-    dispatch => ({
-        updateUserInfoHandler: (infoList) => {
-        dispatch(updateUserInfoState(infoList));
-      },
-    }),
-  )(Main);
+export default Main;

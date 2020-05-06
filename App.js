@@ -4,10 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-import { Provider, connect } from 'react-redux';
-import {createStore} from 'redux';
+//import { Provider, connect } from 'react-redux';
+//import {createStore} from 'redux';
 //import createSagaMiddleware from 'redux-saga';
-import rootReducer from './reducers'
+//import rootReducer from './reducers'
 import Main from './components/Main'
 import { HomeScreen } from './components/Home/HomeScreen'
 import { ProfileScreen } from './components/Profile/ProfileScreen'
@@ -53,7 +53,7 @@ function CreatePostScreen({ navigation, route }) {
     </>
   );
 }
-let store = createStore(rootReducer, window.STATE_FROM_SERVER)
+//let store = createStore(rootReducer, window.STATE_FROM_SERVER)
 
 export default class App extends Component {
 
@@ -62,9 +62,7 @@ export default class App extends Component {
   }
   render() {
     return (
-      <Provider store={store}>
         <Main/>
-      </Provider>
     );
   }
 }

@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, FlatList, SafeAreaView, Dimensions } from 'react-native';
 import { ListItem, Button } from 'react-native-elements';
-import { connect } from 'react-redux';
 import { db } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
@@ -26,25 +25,6 @@ class ChatroomList extends Component {
         onPress={()=>{this.props.onClickChatRoomUser(item)}}
       />
     )
-    async updateUserInfo(){
-      const {updateUserInfoHandler} = this.props;
-      let userInfo = []
-      console.log("Read /users");
-      console.log(db.ref('/users'));
-      await db.ref('/users').once('value',  snap => {
-          console.log(snap);
-          snap.forEach(
-              child => {
-              
-              userInfo.push(child.val());
-              }
-          )
-      })
-      this.setState({userInfo: userInfo})
-    }
-  componentDidMount(){
-    //this.updateUserInfo()
-  }
   render() {
     return (
       <SafeAreaView>
@@ -59,8 +39,4 @@ class ChatroomList extends Component {
     );
   }   
 } 
-export default connect(
-  state => ({ 
-    userInfoStore: state.userInfo 
-  })
-)(ChatroomList);
+export default ChatroomList;
