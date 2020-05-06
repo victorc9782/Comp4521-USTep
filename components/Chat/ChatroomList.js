@@ -11,7 +11,8 @@ class ChatroomList extends Component {
   constructor(props) {
     super(props)
     this.state={
-      userInfo: null
+      userInfo: null,
+      loadedUserData: false
     }
   }
     keyExtractor = (item, index) => index.toString()
@@ -32,29 +33,40 @@ class ChatroomList extends Component {
       console.log("Read /users");
       console.log(db.ref('/users'));
       await db.ref('/users').once('value',  snap => {
-          console.log(snap);
           snap.forEach(
               child => {
-              
-              userInfo.push(child.val());
+                console.log("Push:" +child.val().id);
+                userInfo.push(child.val());
               }
           )
+      }).then(() => {
+        this.setState({userInfo: userInfo})
       })
-      this.setState({userInfo: userInfo})
     }
-  componentDidMount(){
-    //this.updateUserInfo()
+  async componentDidMount(){
+    await this.updateUserInfo().then(()=>{
+      console.log("userInfo final:");
+      console.log(this.state.userInfo);
+      this.setState({loadedUserData: true})
+      this.forceUpdate();
+    })
   }
   render() {
     return (
       <SafeAreaView>
+        {this.state.loadedUserData&&(
+          <>
+        <Button onPress={()=>console.log(this.state.userInfo)}>Test</Button>
         <FlatList
           keyExtractor={this.keyExtractor}
-          data={this.props.chatList}
-          //data={this.state.userinfo}
+          //data={this.props.chatList}
+          data={this.state.userinfo}
           renderItem={this.renderItem}
           style={{width:windowWidth}}
         />
+        </>
+        )
+        }
       </SafeAreaView>
     );
   }   

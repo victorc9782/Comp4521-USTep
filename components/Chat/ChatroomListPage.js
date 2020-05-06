@@ -13,17 +13,22 @@ function keyExtractor(item, index){
 export default function ChatroomListPage({ route, navigation}) {
   
   let localUserInfo = []
-  console.log("ChatroomListPage Read ref")
-  console.log(db.ref('/users'));
+  //console.log("ChatroomListPage Read ref")
+  //console.log(db.ref('/users'));
   db.ref('/users').once('value',  snap => {
     console.log(snap);
     snap.forEach(
         child => {
-          console.log(child.val());
+          //console.log(child.val());
           localUserInfo.push(child.val());
         }
     )
   })
+  localUserInfo.forEach(data =>{
+    //console.log("localUserInfo")
+    //console.log(data)
+    }
+  )
   console.log("ChatroomListPage Read ref end")
   
     return (
