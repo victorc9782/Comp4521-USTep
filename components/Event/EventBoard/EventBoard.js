@@ -2,8 +2,9 @@ import React from 'react';
 import { StyleSheet, FlatList, View, SafeAreaView } from 'react-native';
 import EventItem from './EventItem';
 import EventFilter from './EventFilter';
-import firebase from 'firebase';
-import { db } from '../../config/config';
+import { watchEventsChanged, getEvents } from '../../../reducers/events'
+import { database } from '../../../config/config';
+import { connect } from 'react-redux';
 
 
 const styles = StyleSheet.create({
@@ -16,20 +17,8 @@ const styles = StyleSheet.create({
 })
 
 
-export function EventScreen({ route, navigation }) {
-    let events = []
-    db.ref('/events').on('value', snap => {
-        console.log(snap);
-        snap.forEach(
-            child => {
-                events.push(child.val());
-            }
-        )
-    });
-
-
+function EventBoard({ route, navigation, events }) {
     const keyExtractor = (item, key) => key.toString();
-
     const renderItem = ({ item }) =>
         <EventItem
             title={item.title}
@@ -39,7 +28,6 @@ export function EventScreen({ route, navigation }) {
             location={item.location} />
     return (
         <SafeAreaView style={styles.container}>
-            {/* <EventFilter/> */}
             <FlatList
                 data={events}
                 keyExtractor={keyExtractor}
@@ -61,6 +49,14 @@ const renderSeparator = () => {
     );
 };
 
-function randomDate(start, days) {
-    return new Date(start.getTime() + (Math.random() * days * 24 * 60 * 60 * 1000));
+const mapState = state => ({
+    events: state.events,
+})
+
+const mapDispatch = dispatch => {
+    /* dispatch(getEvents()); */
+    dispatch(watchEventsChanged());
+    return {};
 }
+
+export default connect(mapState, mapDispatch)(EventBoard);

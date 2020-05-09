@@ -4,16 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-//import { Provider, connect } from 'react-redux';
-//import {createStore} from 'redux';
-//import createSagaMiddleware from 'redux-saga';
-//import rootReducer from './reducers'
 import Main from './components/Main'
 import { HomeScreen } from './components/Home/HomeScreen'
 import { ProfileScreen } from './components/Profile/ProfileScreen'
 import {ChatroomListPage} from './components/Chat/ChatroomListPage'
 import {ChatroomPage} from './components/Chat/ChatroomPage'
-import { EventScreen } from './components/Event/EventScreen'
 import { NotificationScreen } from './components/Notification/NotificationScreen'
 import firebase from 'firebase';
 

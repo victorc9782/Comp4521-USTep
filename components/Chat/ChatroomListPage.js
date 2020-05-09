@@ -4,7 +4,7 @@ import { ListItem } from 'react-native-elements';
 
 import Chatroom from './Chatroom'
 import ChatroomList from './ChatroomList'
-import { db } from '../../config/config';
+import { database } from '../../config/config';
 
 
 function keyExtractor(item, index){
@@ -14,8 +14,8 @@ export default function ChatroomListPage({ route, navigation}) {
   
   let localUserInfo = []
   console.log("ChatroomListPage Read ref")
-  console.log(db.ref('/users'));
-  db.ref('/users').once('value',  snap => {
+  console.log(database.ref('/users'));
+  database.ref('/users').once('value',  snap => {
     console.log(snap);
     snap.forEach(
         child => {
