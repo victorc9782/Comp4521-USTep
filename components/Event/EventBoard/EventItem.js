@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 
 const EventItem = ({ title, description, date, location, image_url }) => {
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {console.log("Testing")}}>
             <View style={styles.container}>
                 <View style={styles.container_text}>
                     <Text style={styles.title}>{title}</Text>

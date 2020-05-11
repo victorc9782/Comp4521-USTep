@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
 
-import { db } from '../../config/config';
+import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
 export default class Chatroom extends Component {
@@ -36,10 +36,10 @@ export default class Chatroom extends Component {
   
   async getChatRecord(chatroomId){
     console.log("getChatRecord")
-    console.log(db.ref('/chatroom/'+'001'));
+    console.log(database.ref('/chatroom/'+'001'));
     //console.log(new Date);
     let messages = []
-    await db.ref('/chatroom/'+'001').once('value',  snap => {
+    await database.ref('/chatroom/'+'001').once('value',  snap => {
       console.log(snap);
       snap.forEach(
           child => {

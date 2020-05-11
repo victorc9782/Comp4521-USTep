@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, FlatList, SafeAreaView, Dimensions } from 'react-native';
 import { ListItem, Button } from 'react-native-elements';
-import { db } from '../../config/config';
+import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
   

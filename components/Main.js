@@ -4,19 +4,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
-//import { Provider, connect } from 'react-redux';
 import firebase from 'firebase';
-//import createSagaMiddleware from 'redux-saga';
+import { combinedStore } from '../reducers/index'
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 import { HomeScreen } from './Home/HomeScreen'
 import { ProfileScreen } from './Profile/ProfileScreen'
 import ChatroomListPage from './Chat/ChatroomListPage'
-import {ChatroomPage} from './Chat/ChatroomPage'
-import { EventScreen } from './Event/EventScreen'
+import { ChatroomPage } from './Chat/ChatroomPage'
+import { Event } from './Event/Event'
 import { NotificationScreen } from './Notification/NotificationScreen'
 
-import {updateUserInfoState} from '../reducers/userInfo'
-import { db } from '../config/config';
+import { updateUserInfoState } from '../reducers/userInfo'
+import { database } from '../config/config';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -56,28 +58,28 @@ function CreatePostScreen({ navigation, route }) {
 }
 const Tab = createBottomTabNavigator();
 
-      /*<Provider store={store}>*/
-      /*</Provider>*/
+/*<Provider store={store}>*/
+/*</Provider>*/
 class Main extends Component {
 
   constructor(props) {
     super(props)
   }
 
-  async updateUserInfo(){
-    const {updateUserInfoHandler} = this.props;
+  async updateUserInfo() {
+    const { updateUserInfoHandler } = this.props;
     let userInfo = []
     console.log("Read /users");
-    console.log(db.ref('/users'));
-    await db.ref('/users').once('value',  snap => {
-        console.log(snap);
-        snap.forEach(
-            child => {
-            
-            console.log(child.val());
-            userInfo.push(child.val());
-            }
-        )
+    console.log(database.ref('/users'));
+    await database.ref('/users').once('value', snap => {
+      console.log(snap);
+      snap.forEach(
+        child => {
+
+          console.log(child.val());
+          userInfo.push(child.val());
+        }
+      )
     })
     console.log("Read /users End");
     console.log(userInfo)
@@ -94,7 +96,9 @@ class Main extends Component {
   }
   */
   render() {
+    const store = createStore(combinedStore, applyMiddleware(thunk));
     return (
+      <Provider store={store}>
         <NavigationContainer>
           <Tab.Navigator
             initialRouteName="Home"
@@ -121,7 +125,7 @@ class Main extends Component {
             />
             <Tab.Screen
               name="Event"
-              component={EventScreen}
+              component={Event}
               options={{
                 tabBarIcon: ({ color, size }) => (
                   <MaterialCommunityIcons name="calendar-text-outline" color={color} size={size} />
@@ -152,6 +156,7 @@ class Main extends Component {
             />
           </Tab.Navigator>
         </NavigationContainer>
+      </Provider>
     );
   }
 }

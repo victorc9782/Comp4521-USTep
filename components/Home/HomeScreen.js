@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Button, FlatList, ScrollView, SafeAreaView } from 'react-native'
 import { connect } from 'react-redux';
 
-import { db } from '../../config/config';
+import { database } from '../../config/config';
 
 export function HomeScreen({ navigation, route }) {
 

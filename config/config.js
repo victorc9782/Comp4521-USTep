@@ -1,7 +1,7 @@
-import Firebase from "firebase";
+import firebase from "firebase";
 
 
-const firebaseConfig = {
+const config = {
     apiKey: "AIzaSyB9XGtH8pMM3HClGwSCtAYEP4z1GKc_QFA",
     authDomain: "comp4521-5739d.firebaseapp.com",
     databaseURL: "https://comp4521-5739d.firebaseio.com",
@@ -12,6 +12,12 @@ const firebaseConfig = {
     measurementId: "G-81NGKPSCB8"
 };
 
+let apps = firebase.apps
+
 console.log("Initialize Firebase");
-const app = Firebase.initializeApp(firebaseConfig);
-export const db = app.database();
+if (!apps.length) {
+    apps = firebase.initializeApp(config);
+}
+
+
+export const database = apps.database();

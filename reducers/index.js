@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-
 import userInfo from './userInfo';
+import { events } from './events';
 
-export default combineReducers({
-    userInfo
-  });
+
+export const combinedStore = combineReducers({
+  /* userInfo, */
+  events,
+});
