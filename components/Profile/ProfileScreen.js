@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
 import { db, storage } from '../../config/config';
 
-var backgroundImage = require('../../assets/wallpaper.jpg');
 var num_of_followers = '5215';
 var num_of_views = '154420';
 var loading = true ;
 var user = false;
+
+const THIS_USER_ID = 3;
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -153,10 +154,14 @@ export const ProfileScreen = ({ route, navigation }) => {
 
     console.disableYellowBox = true;
     console.ignoredYellowBox = ['Setting a timer'];
+    
+    const user_id;
 
-    var user_id = 3;
-
-    //const user_id = [route.params?id];
+    if([route.params?.id] != null) {
+        user_id = [route.params?.id]
+    } else {
+        user_id = THIS_USER_ID;
+    }
 
     const [data, setData] = useState({
         loaded: false,
