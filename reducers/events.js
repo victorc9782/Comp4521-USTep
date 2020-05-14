@@ -50,7 +50,6 @@ export function events(state = [], { type, payload }) {
         case FETCH_EVENTS:
             return payload;
         case UPDATE_EVENTS:
-            console.log("test" + payload)
             return payload;
         default:
             return state;
