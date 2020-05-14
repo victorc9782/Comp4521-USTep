@@ -14,6 +14,9 @@ import firebase from 'firebase';
 import { ResultPage } from './components/Finding/ResultPage'
 import { MatchPage } from './components/Finding/MatchPage'
 
+import { LoginScreen } from './components/Login/LoginScreen'
+import { UpdateInfoScreen } from './components/UpdateInfo/UpdateInfoScreen'
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
@@ -61,9 +64,19 @@ function ChatScreen({ navigation, route }) {
 function FindingScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator headerMode="none">
       <Stack.Screen name="Finding" component={MatchPage} />
       <Stack.Screen name="FindingResult" component={ResultPage} />
+    </Stack.Navigator>
+  );
+}
+
+function LoginAndUpdateScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
     </Stack.Navigator>
   );
 }
@@ -84,7 +97,7 @@ function CreatePostScreen({ navigation, route }) {
         title="Done"
         onPress={() => {
           // Pass params back to home screen
-          navigation.navigate('Home', { post: postText });
+          navigation.navigate('Login', { post: postText });
         }}
       />
     </>
@@ -154,6 +167,10 @@ export default class App extends Component {
           <Tab.Screen
             name="Finding"
             component={FindingScreen}
+          />
+          <Tab.Screen
+            name="Login"
+            component={LoginAndUpdateScreen}
           />
         </Tab.Navigator>
       </NavigationContainer>

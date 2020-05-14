@@ -42,16 +42,13 @@ const styles = StyleSheet.create({
         color: '#47525E',
         fontSize: 20,
         fontWeight: 'bold',
-        fontFamily: 'Roboto',
     },
     description: {
         color: '#8492A6',
-        fontFamily: 'Roboto',
         fontSize: 16,
     },
     audience: {
         color: '#8492A6',
-        fontFamily: 'Roboto',
         fontSize: 12,
     },
     buttonContainer: {
@@ -79,7 +76,7 @@ function getUserData(_id) {
     db.ref('/users/' + _id).once('value',  snap => {
         //console.log(snap.val()['name']);
         userData.push(snap.val()['name']);
-        userData.push(snap.val()['Description']);
+        userData.push(snap.val()['description']);
     });
 
     return userData;
@@ -90,13 +87,19 @@ async function downloadImg (ref) {
     return imageLink.toString() 
 } 
 
-
-async function getAssetImage(_id) {
-    const icon_ref = storage.ref('user/' + _id + '/icon/icon.jpg');
+async function getWallpaperImage(_id) {
     const wallpaper_ref = storage.ref('user/' + _id + '/wallpaper/wallpaper.jpg');
     const promises = [];
     
     promises.push(downloadImg(wallpaper_ref));
+
+    return Promise.all(promises);
+}
+
+async function getIconImage(_id) {
+    const icon_ref = storage.ref('user/' + _id + '/icon/icon.jpg');
+    const promises = [];
+    
     promises.push(downloadImg(icon_ref));
 
     return Promise.all(promises);
@@ -122,15 +125,21 @@ async function loadData(user_id) {
     console.log('Loading User Data...')
 
     let userData = getUserData(user_id);
-
-    console.log(userData[0]);
     
     console.log('Loading Icon...')
 
-    await getAssetImage(user_id).then( result => {
-        result.forEach( link => {
-            assetArray.push(link);
-        })
+    let wallpaper = await getWallpaperImage(user_id).then( result => {
+        return result[0];
+    }).catch ( err => {
+        console.log(err)
+        return 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
+    });
+
+    let icon = await getIconImage(user_id).then( result => {
+        return result[0];
+    }).catch ( err => {
+        console.log(err)
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU'
     });
 
     console.log('Loading Gallery...')
@@ -146,7 +155,7 @@ async function loadData(user_id) {
 
     console.log('-- Finished Loading -- ');
 
-    return [true, assetArray, galleryArray, userData];
+    return [true, wallpaper, icon, galleryArray, userData];
 }
 
 
@@ -154,8 +163,8 @@ export const ProfileScreen = ({ route, navigation }) => {
 
     console.disableYellowBox = true;
     console.ignoredYellowBox = ['Setting a timer'];
-    
-    const user_id;
+
+    let user_id = null;
 
     if([route.params?.id] != null) {
         user_id = [route.params?.id]
@@ -176,10 +185,10 @@ export const ProfileScreen = ({ route, navigation }) => {
             loading = false;
             setData({
                 loaded: result[0],
-                wallpaper: result[1][0],
-                icon: result[1][1],
-                gallery: result[2],
-                detail: result[3],
+                wallpaper: result[1],
+                icon: result[2],
+                gallery: result[3],
+                detail: result[4],
             })
         })
     }
