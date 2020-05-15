@@ -24,7 +24,7 @@ import { LoginScreen } from './Login/LoginScreen'
 import { UpdateInfoScreen } from './UpdateInfo/UpdateInfoScreen'
 
 import { updateUserInfoState } from '../reducers/userInfo'
-import { database } from '../config/config';
+import { database, auth } from '../config/config';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -73,12 +73,23 @@ function FindingScreen({ navigation, route }) {
   );
 }
 
+function ProfileAndUpdateScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
+    </Stack.Navigator>
+  );
+}
+
 function LoginAndUpdateScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }
@@ -91,6 +102,9 @@ class Main extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      login: auth.currentUser != null?true:false, 
+    }
   }
 
   async updateUserInfo() {
@@ -119,7 +133,7 @@ class Main extends Component {
     if (!this.props.userInfoStore.userInfo){
       this.updateUserInfo()
     }
-    
+      
   }
   */
   render() {
@@ -169,15 +183,6 @@ class Main extends Component {
               }}
             />
             <Tab.Screen
-              name="Profile"
-              component={ProfileScreen}
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="account" color={color} size={size} />
-                ),
-              }}
-            />
-            <Tab.Screen
               name="CreatePost"
               component={CreatePostScreen}
             />
@@ -185,10 +190,22 @@ class Main extends Component {
             name="Finding"
             component={FindingScreen}
           />
+            {this.state.login?
+            <Tab.Screen
+              name="Profile"
+              component={ProfileAndUpdateScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="account" color={color} size={size} />
+                ),
+              }}
+            />
+           :
             <Tab.Screen
             name="Login"
             component={LoginAndUpdateScreen}
-          />
+            />
+            }
           </Tab.Navigator>
         </NavigationContainer>
       </Provider>

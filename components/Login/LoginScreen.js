@@ -19,13 +19,17 @@ const styles = StyleSheet.create({
     }, panel: {
         width: '80%',
     }, logo: {
-        paddingTop: 220,
-        height: 150,
-        width: 350,
+        paddingTop: 230,
+        height: 130,
+        width: 130,
         resizeMode: 'contain'
     }, socialMedia: {
-        paddingTop: 50,
+        paddingTop: 20,
         width: '80%',
+    }, 
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold'
     }
 
 }); 
@@ -38,6 +42,7 @@ export const LoginScreen = ({ route, navigation }) => {
                 style={styles.logo}
                 source={require('../../assets/logo.png')}
                 />
+            <Text style={styles.title}> Sign In </Text>
             <View style={styles.panel}>
                 <LoginPanel navigation={navigation}/>
             </View>

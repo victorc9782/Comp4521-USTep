@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
-import { database, storage } from '../../config/config';
+import { database, storage, auth } from '../../config/config';
 
-var num_of_followers = '5215';
 var num_of_views = '154420';
 var loading = true ;
 var user = false;
@@ -77,6 +76,7 @@ function getUserData(_id) {
         //console.log(snap.val()['name']);
         userData.push(snap.val()['name']);
         userData.push(snap.val()['description']);
+        userData.push(snap.val()['department'])
     });
 
     return userData;
@@ -90,20 +90,22 @@ async function downloadImg (ref) {
 async function getWallpaperImage(_id) {
     const wallpaper_ref = storage.ref('user/' + _id + '/wallpaper/wallpaper.jpg');
     const promises = [];
-    
-    promises.push(downloadImg(wallpaper_ref));
 
+    promises.push(downloadImg(wallpaper_ref));
+    
     return Promise.all(promises);
 }
+
 
 async function getIconImage(_id) {
     const icon_ref = storage.ref('user/' + _id + '/icon/icon.jpg');
     const promises = [];
-    
-    promises.push(downloadImg(icon_ref));
 
+    promises.push(downloadImg(icon_ref));
+    
     return Promise.all(promises);
 }
+
 
 async function getGalleryImage(_id) {
     const gallery_ref = storage.ref('/user/' + _id + '/gallery');
@@ -119,30 +121,23 @@ async function getGalleryImage(_id) {
 }
 
 async function loadData(user_id) {
-    const assetArray = []
     const galleryArray = [];
-
-    console.log('Loading User Data...')
+    let wallpaper_image = 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
+    let icon_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU';
 
     let userData = getUserData(user_id);
-    
-    console.log('Loading Icon...')
 
-    let wallpaper = await getWallpaperImage(user_id).then( result => {
-        return result[0];
+    await getWallpaperImage(user_id).then( result => {
+        wallpaper_image =  result[0];
     }).catch ( err => {
         console.log(err)
-        return 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
     });
 
-    let icon = await getIconImage(user_id).then( result => {
-        return result[0];
+    await getIconImage(user_id).then( result => {
+        icon_image = result[0];
     }).catch ( err => {
         console.log(err)
-        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU'
     });
-
-    console.log('Loading Gallery...')
 
     await getGalleryImage(user_id).then( result => {
         let counter = 0;
@@ -155,7 +150,7 @@ async function loadData(user_id) {
 
     console.log('-- Finished Loading -- ');
 
-    return [true, wallpaper, icon, galleryArray, userData];
+    return [true, wallpaper_image, icon_image, galleryArray, userData];
 }
 
 
@@ -164,14 +159,6 @@ export const ProfileScreen = ({ route, navigation }) => {
     console.disableYellowBox = true;
     console.ignoredYellowBox = ['Setting a timer'];
 
-    let user_id = null;
-
-    if([route.params?.id] != null) {
-        user_id = [route.params?.id]
-    } else {
-        user_id = THIS_USER_ID;
-    }
-
     const [data, setData] = useState({
         loaded: false,
         wallpaper: '',
@@ -179,6 +166,19 @@ export const ProfileScreen = ({ route, navigation }) => {
         gallery: [],
         detail: '',
     });
+
+   let user_id = '';
+      
+    if(route.params?.id != null || route.params?.id != undefined) {
+        console.log([route.params?.id])
+        user_id = [route.params?.id]
+    } else if(auth.currentUser.uid) {
+        user_id = auth.currentUser.uid.toString();
+        user = true;
+    } else {
+        user_id = THIS_USER_ID;
+    }
+
     
     if(loading) {
         loadData(user_id).then( result => {
@@ -216,17 +216,17 @@ export const ProfileScreen = ({ route, navigation }) => {
                     />
                     <Text style={styles.title}> {data['detail'][0]} </Text>
                     <Text style={styles.description}> {data['detail'][1]} </Text>
-                    <Text style={styles.audience}>{num_of_followers} followers | {num_of_views} views</Text>
+                    <Text style={styles.audience}>{data['detail'][2]}  | {num_of_views} views</Text>
                     {   
                         user?
                         <View style={styles.buttonContainer}>
                         <Button
-                            title="UpLoad Image"
+                            title="Update Profile"
                             style={styles.button}
-                            onPress={() => navigation.navigate('Chat')}
+                            onPress={() => navigation.navigate('UpdateInfo')}
                         />
                         <Button
-                            title="Chat with Friends"
+                            title="EDIT GALLERY"
                             style={styles.button}
                             onPress={() => navigation.navigate('Chat')}
                         />

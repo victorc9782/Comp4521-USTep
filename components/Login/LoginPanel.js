@@ -32,6 +32,7 @@ export default class LoginPanel extends Component {
       })
       .catch(err => {
         this.setState({ error : err.code })
+        this.setState({loading:false})
       });
   }
 
@@ -41,7 +42,6 @@ export default class LoginPanel extends Component {
         console.log('Sign-In Success');
         //updateUser(auth.currentUser);
         console.log(auth.currentUser.uid)
-        console.log('updated')
         navigation.navigate('Home');
       })
       .catch( err => {
@@ -84,11 +84,13 @@ export default class LoginPanel extends Component {
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
             title='Register'
             type='clear'
+            loading={this.state.loading}
             onPress = {() => {
               //this.props.navigation.navigate('UpdateInfo', {uid : 'RiIvCRJ0fghZwZGgd4SWHxfEqjo2'});
               if(this.state.email == null || this.state.password == null) {
                 this.setState({ error : 'Email / Password cannot be empty'})
               } else {
+                this.setState({loading : true})
                 this.createUser(this.state.email, this.state.password, this.props.navigation);
               }
             }

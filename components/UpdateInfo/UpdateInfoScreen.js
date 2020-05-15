@@ -12,7 +12,6 @@ console.ignoredYellowBox = ['Setting a timer'];
 
 const styles = StyleSheet.create({
     content: {
-        height: windowHeight * 2,
         alignItems: 'center',
         backgroundColor: 'white' 
     }, 
@@ -27,6 +26,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     }, 
     title : {
+        alignItems: 'center',
         color: 'white',
         fontSize: 35,
         fontWeight: 'bold',
@@ -44,7 +44,7 @@ export const UpdateInfoScreen = ({ route, navigation }) => {
             <View style={styles.content}>
                 <View style={styles.wallpaper}>
                     <ImageBackground source={require('../../assets/info.jpg')} style={styles.backgroundImage}>
-                        <Text style={styles.title}> Enjoy Your USTep Life ! </Text>
+                        <Text style={styles.title}>Enjoy USTep Life !</Text>
                     </ImageBackground>
                 </View>
                 <View style={styles.card}>
