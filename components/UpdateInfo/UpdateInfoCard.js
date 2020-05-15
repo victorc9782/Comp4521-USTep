@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, StyleSheet } from 'react-native'; 
 import { SocialIcon, Card, Button, Input, ButtonGroup, FormLabel, FormInput, FormValidationMessage} from 'react-native-elements'
 
-import { db, storage } from '../../config/config'
+import { database, storage } from '../../config/config'
 import * as firebase from 'firebase';
 
 import UploadImageButton from './UploadImageButton'
@@ -83,7 +83,7 @@ export default class UpdateInfoCard extends Component {
 
         await this.uploadPhotoAsync(this.state.profilePath, '/icon/icon.jpg');
        
-        db.ref('/users/' + _uid)
+        database.ref('/users/' + _uid)
         .set({
             uid: _uid,
             avatar_url: this.state.downloadLink,

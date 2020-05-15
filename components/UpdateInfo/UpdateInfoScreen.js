@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet , Dimensions, ImageBackground, Text} from 'react-native'
-import { db, storage } from '../../config/config';
+import { database, storage } from '../../config/config';
 
 import UpdateInfoCard  from './UpdateInfoCard';
 

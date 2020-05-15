@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
-import { db, storage } from '../../config/config';
+import { database, storage } from '../../config/config';
 import LoginPanel from './LoginPanel';
 import SoicalMediaLoginPanel from './SocialMediaLoginPanel'
 
