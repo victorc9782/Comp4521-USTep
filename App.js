@@ -7,10 +7,19 @@ import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import Main from './components/Main'
 import { HomeScreen } from './components/Home/HomeScreen'
 import { ProfileScreen } from './components/Profile/ProfileScreen'
-import {ChatroomListPage} from './components/Chat/ChatroomListPage'
-import {ChatroomPage} from './components/Chat/ChatroomPage'
+
+import { ChatroomListPage } from './components/Chat/ChatroomListPage'
+import { ChatroomPage } from './components/Chat/ChatroomPage'
+import { EventScreen } from './components/Event/EventScreen'
+
 import { NotificationScreen } from './components/Notification/NotificationScreen'
 import firebase from 'firebase';
+
+import { ResultPage } from './components/Finding/ResultPage'
+import { MatchPage } from './components/Finding/MatchPage'
+
+import { LoginScreen } from './components/Login/LoginScreen'
+import { UpdateInfoScreen } from './components/UpdateInfo/UpdateInfoScreen'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -22,6 +31,26 @@ function ChatScreen({ navigation, route }) {
     <Stack.Navigator>
       <Stack.Screen name="ChatroomList" component={ChatroomListPage} />
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
+    </Stack.Navigator>
+  );
+}
+
+function FindingScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Finding" component={MatchPage} />
+      <Stack.Screen name="FindingResult" component={ResultPage} />
+    </Stack.Navigator>
+  );
+}
+
+function LoginAndUpdateScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
     </Stack.Navigator>
   );
 }
@@ -42,7 +71,7 @@ function CreatePostScreen({ navigation, route }) {
         title="Done"
         onPress={() => {
           // Pass params back to home screen
-          navigation.navigate('Home', { post: postText });
+          navigation.navigate('Login', { post: postText });
         }}
       />
     </>

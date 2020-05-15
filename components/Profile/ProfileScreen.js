@@ -1,14 +1,26 @@
-import React from 'react'
-import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
+import { db, storage } from '../../config/config';
 
-var backgroundImage = require('../../assets/wallpaper.jpg');
-var icon = require('../../assets/icon_test.jpg');
-var name = 'Brandon Moore';
-var description = 'CPEG Student. Currently in London, UK';
 var num_of_followers = '5215';
 var num_of_views = '154420';
+var loading = true ;
+var user = false;
+
+const THIS_USER_ID = 3;
+
+const windowHeight = Dimensions.get('window').height;
+
+console.disableYellowBox = true;
+console.ignoredYellowBox = ['Setting a timer'];
 
 const styles = StyleSheet.create({
+    loading: {
+        height: windowHeight,
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    },
     contentContainer: {
         paddingTop: 10,
         backgroundColor: 'white',
@@ -30,16 +42,13 @@ const styles = StyleSheet.create({
         color: '#47525E',
         fontSize: 20,
         fontWeight: 'bold',
-        fontFamily: 'Roboto',
     },
     description: {
         color: '#8492A6',
-        fontFamily: 'Roboto',
         fontSize: 16,
     },
     audience: {
         color: '#8492A6',
-        fontFamily: 'Roboto',
         fontSize: 12,
     },
     buttonContainer: {
@@ -59,65 +68,201 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     }
 
-  });  
+  }); 
+
+function getUserData(_id) {
+    let userData = [];
+
+    db.ref('/users/' + _id).once('value',  snap => {
+        //console.log(snap.val()['name']);
+        userData.push(snap.val()['name']);
+        userData.push(snap.val()['description']);
+    });
+
+    return userData;
+}
+
+async function downloadImg (ref) {
+    let imageLink = await ref.getDownloadURL();
+    return imageLink.toString() 
+} 
+
+async function getWallpaperImage(_id) {
+    const wallpaper_ref = storage.ref('user/' + _id + '/wallpaper/wallpaper.jpg');
+    const promises = [];
+    
+    promises.push(downloadImg(wallpaper_ref));
+
+    return Promise.all(promises);
+}
+
+async function getIconImage(_id) {
+    const icon_ref = storage.ref('user/' + _id + '/icon/icon.jpg');
+    const promises = [];
+    
+    promises.push(downloadImg(icon_ref));
+
+    return Promise.all(promises);
+}
+
+async function getGalleryImage(_id) {
+    const gallery_ref = storage.ref('/user/' + _id + '/gallery');
+    const promises = [];
+
+    await gallery_ref.listAll().then(result=> {
+        result.items.forEach( imageRef=> {
+            promises.push(downloadImg(imageRef));
+        });
+    })
+
+    return Promise.all(promises);
+}
+
+async function loadData(user_id) {
+    const assetArray = []
+    const galleryArray = [];
+
+    console.log('Loading User Data...')
+
+    let userData = getUserData(user_id);
+    
+    console.log('Loading Icon...')
+
+    let wallpaper = await getWallpaperImage(user_id).then( result => {
+        return result[0];
+    }).catch ( err => {
+        console.log(err)
+        return 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
+    });
+
+    let icon = await getIconImage(user_id).then( result => {
+        return result[0];
+    }).catch ( err => {
+        console.log(err)
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU'
+    });
+
+    console.log('Loading Gallery...')
+
+    await getGalleryImage(user_id).then( result => {
+        let counter = 0;
+
+        result.forEach( link => {
+            galleryArray.push({image: {uri: link}, id : counter});
+            counter ++;
+        })
+    });
+
+    console.log('-- Finished Loading -- ');
+
+    return [true, wallpaper, icon, galleryArray, userData];
+}
 
 
 export const ProfileScreen = ({ route, navigation }) => {
 
+    console.disableYellowBox = true;
+    console.ignoredYellowBox = ['Setting a timer'];
+
+    let user_id = null;
+
+    if([route.params?.id] != null) {
+        user_id = [route.params?.id]
+    } else {
+        user_id = THIS_USER_ID;
+    }
+
+    const [data, setData] = useState({
+        loaded: false,
+        wallpaper: '',
+        icon: '',
+        gallery: [],
+        detail: '',
+    });
+    
+    if(loading) {
+        loadData(user_id).then( result => {
+            loading = false;
+            setData({
+                loaded: result[0],
+                wallpaper: result[1],
+                icon: result[2],
+                gallery: result[3],
+                detail: result[4],
+            })
+        })
+    }
+
     return (
         <ScrollView>
-        <View style={styles.contentContainer}>
-            <Image
-                style={styles.jumbotron}
-                source={backgroundImage}
-            />
-            <Image 
-                style={styles.icon} 
-                source={icon}
-                resizeMode={'cover'}
-            />
-            <Text style={styles.title}> {name} </Text>
-            <Text style={styles.description}> {description} </Text>
-            <Text style={styles.audience}>{num_of_followers} followers | {num_of_views} views</Text>
-            <View style={styles.buttonContainer}>
-                <Button
-                    title="Add Friend"
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Chat')}
-                />
-                <Button
-                    title="Send Message"
-                    style={styles.button}
-                    onPress={() => navigation.navigate('Chat')}
-                />
-            </View>
-            <View style={styles.gallery}>
-                <FlatList
-                    data = {[
-                        {image: require('../../assets/gallery1.jpg'), id: '1'},
-                        {image: require('../../assets/gallery2.jpg'), id: '2'},
-                        {image: require('../../assets/gallery3.jpg'), id: '3'},
-                        {image: require('../../assets/gallery4.jpg'), id: '4'},
-                        {image: require('../../assets/gallery5.jpg'), id: '5'},
-                        {image: require('../../assets/gallery6.jpg'), id: '6'},
-                        {image: require('../../assets/gallery7.jpg'), id: '7'},
-                        {image: require('../../assets/gallery8.jpg'), id: '8'},
-                        {image: require('../../assets/gallery9.jpg'), id: '9'},
-                    ]}
-                    keyExtractor={(item) => item.id}
-                    numColumns={3}
+        {    !data['loaded']?
+                <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#FF6600" />
+                    <Text> LOADING . . . </Text>
+                </View>
+            :
+                <View style={styles.contentContainer}>
+                    <Image
+                        style={styles.jumbotron}
+                        source={{
+                            uri: data['wallpaper']
+                        }}
+                    />
+                    <Image 
+                        style={styles.icon} 
+                        source={{
+                            uri: data['icon']
+                        }}
+                    />
+                    <Text style={styles.title}> {data['detail'][0]} </Text>
+                    <Text style={styles.description}> {data['detail'][1]} </Text>
+                    <Text style={styles.audience}>{num_of_followers} followers | {num_of_views} views</Text>
+                    {   
+                        user?
+                        <View style={styles.buttonContainer}>
+                        <Button
+                            title="UpLoad Image"
+                            style={styles.button}
+                            onPress={() => navigation.navigate('Chat')}
+                        />
+                        <Button
+                            title="Chat with Friends"
+                            style={styles.button}
+                            onPress={() => navigation.navigate('Chat')}
+                        />
+                        </View>
+                        :
+                        <View style={styles.buttonContainer}>
+                        <Button
+                            title="Add Friend"
+                            style={styles.button}
+                            onPress={() => navigation.navigate('Chat')}
+                        />
+                        <Button
+                            title="Send Message"
+                            style={styles.button}
+                            onPress={() => navigation.navigate('Chat')}
+                        />
+                        </View>
+                    }   
+                    <View style={styles.gallery}>
+                        <FlatList
+                            data = {data['gallery']}
+                            keyExtractor={(item) => item.id}
+                            numColumns={3}
 
-                    renderItem={({item} ) => (
-                    <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
-                        <Image
-                            style={styles.image}
-                            source={item.image}
+                            renderItem={({item} ) => (
+                            <View style={{ flex: 1, flexDirection: 'column', margin: 1 }}>
+                                <Image
+                                    style={styles.image}
+                                    source={item.image}
+                                />
+                            </View>
+                            )}
                         />
                     </View>
-                    )}
-                />
-            </View>
-        </View>
+                </View>
+        }
         </ScrollView>
-    );
-}
+        
+    )};
