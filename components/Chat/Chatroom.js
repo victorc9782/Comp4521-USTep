@@ -5,6 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
+const getChatRecordInterval = 3000;
 export default class Chatroom extends Component {
   constructor(props) {
     super(props)
@@ -15,6 +16,7 @@ export default class Chatroom extends Component {
 
   componentDidMount() {
     this.getChatRecord('001')
+    this._interval = setInterval(()=>{this.getChatRecord('001')},getChatRecordInterval)
     
     /*
     this.setState({
@@ -33,13 +35,14 @@ export default class Chatroom extends Component {
     })
     */
   }
-  
+  componentWillUnmount(){
+    clearInterval(this._interval);
+  }
   async getChatRecord(chatroomId){
     console.log("getChatRecord")
-    console.log(database.ref('/chatroom/'+'001'));
     //console.log(new Date);
     let messages = []
-    await database.ref('/chatroom/'+'001').once('value',  snap => {
+    await database.ref('/chatroom/'+chatroomId).once('value',  snap => {
       console.log(snap);
       snap.forEach(
           child => {
@@ -55,16 +58,15 @@ export default class Chatroom extends Component {
                 avatar: 'https://placeimg.com/140/140/any',
               },
             }
-            console.log(formattedMessage)
+            //console.log(formattedMessage)
             messages.push(formattedMessage)
           }
       )
     })
     console.log("getChatRecord End")
-    console.log(messages)
+    //console.log(messages)
     messages.reverse()
     this.setState({messages: messages})
-
   }
   onSend(messages = []) {
     this.setState(previousState => ({
