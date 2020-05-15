@@ -6,6 +6,7 @@ import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
 const getChatRecordInterval = 3000;
+const inputChatroomId = '001';
 export default class Chatroom extends Component {
   constructor(props) {
     super(props)
@@ -15,8 +16,8 @@ export default class Chatroom extends Component {
   }
 
   componentDidMount() {
-    this.getChatRecord('001')
-    this._interval = setInterval(()=>{this.getChatRecord('001')},getChatRecordInterval)
+    this.getChatRecord(inputChatroomId)
+    this._interval = setInterval(()=>{this.getChatRecord(inputChatroomId)},getChatRecordInterval)
     
     /*
     this.setState({
@@ -65,13 +66,32 @@ export default class Chatroom extends Component {
     })
     console.log("getChatRecord End")
     //console.log(messages)
-    messages.reverse()
+    messages.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1)
+    //messages.reverse()
     this.setState({messages: messages})
   }
   onSend(messages = []) {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }))
+    var newId = this.state.messages.length-1
+    console.log(messages)
+    var currentDate = new Date()
+    console.log(currentDate)
+    database.ref('/chatroom/' + inputChatroomId+'/'+messages[0]._id+'/')
+        .set({
+          _id: messages[0]._id,
+          text: messages[0].text,
+          createdAt: ""+currentDate,
+          user:messages[0].user,
+        })
+        .then(() => {
+            console.log('Sent a new message');
+        })
+        .catch(err => {
+            console.log(err);
+        });
+      
   }
 
   render() {
