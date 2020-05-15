@@ -21,3 +21,5 @@ if (!apps.length) {
 
 
 export const database = apps.database();
+export const storage = apps.storage();
+export const auth = apps.auth();

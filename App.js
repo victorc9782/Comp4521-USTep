@@ -7,10 +7,18 @@ import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import Main from './components/Main'
 import { HomeScreen } from './components/Home/HomeScreen'
 import { ProfileScreen } from './components/Profile/ProfileScreen'
-import {ChatroomListPage} from './components/Chat/ChatroomListPage'
-import {ChatroomPage} from './components/Chat/ChatroomPage'
+
+import { ChatroomListPage } from './components/Chat/ChatroomListPage'
+import { ChatroomPage } from './components/Chat/ChatroomPage'
+
 import { NotificationScreen } from './components/Notification/NotificationScreen'
 import firebase from 'firebase';
+
+import { ResultPage } from './components/Finding/ResultPage'
+import { MatchPage } from './components/Finding/MatchPage'
+
+import { LoginScreen } from './components/Login/LoginScreen'
+import { UpdateInfoScreen } from './components/UpdateInfo/UpdateInfoScreen'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -42,7 +50,7 @@ function CreatePostScreen({ navigation, route }) {
         title="Done"
         onPress={() => {
           // Pass params back to home screen
-          navigation.navigate('Home', { post: postText });
+          navigation.navigate('Login', { post: postText });
         }}
       />
     </>
