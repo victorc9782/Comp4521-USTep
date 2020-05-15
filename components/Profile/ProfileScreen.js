@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
-import { db, storage } from '../../config/config';
+import { database, storage } from '../../config/config';
 
 var num_of_followers = '5215';
 var num_of_views = '154420';
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 function getUserData(_id) {
     let userData = [];
 
-    db.ref('/users/' + _id).once('value',  snap => {
+    database.ref('/users/' + _id).once('value',  snap => {
         //console.log(snap.val()['name']);
         userData.push(snap.val()['name']);
         userData.push(snap.val()['description']);

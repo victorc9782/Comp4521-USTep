@@ -10,7 +10,6 @@ import { ProfileScreen } from './components/Profile/ProfileScreen'
 
 import { ChatroomListPage } from './components/Chat/ChatroomListPage'
 import { ChatroomPage } from './components/Chat/ChatroomPage'
-import { EventScreen } from './components/Event/EventScreen'
 
 import { NotificationScreen } from './components/Notification/NotificationScreen'
 import firebase from 'firebase';
@@ -31,26 +30,6 @@ function ChatScreen({ navigation, route }) {
     <Stack.Navigator>
       <Stack.Screen name="ChatroomList" component={ChatroomListPage} />
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
-    </Stack.Navigator>
-  );
-}
-
-function FindingScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Finding" component={MatchPage} />
-      <Stack.Screen name="FindingResult" component={ResultPage} />
-    </Stack.Navigator>
-  );
-}
-
-function LoginAndUpdateScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
     </Stack.Navigator>
   );
 }

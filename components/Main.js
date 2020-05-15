@@ -17,6 +17,12 @@ import { ChatroomPage } from './Chat/ChatroomPage'
 import { Event } from './Event/Event'
 import { NotificationScreen } from './Notification/NotificationScreen'
 
+import { ResultPage } from './Finding/ResultPage'
+import { MatchPage } from './Finding/MatchPage'
+
+import { LoginScreen } from './Login/LoginScreen'
+import { UpdateInfoScreen } from './UpdateInfo/UpdateInfoScreen'
+
 import { updateUserInfoState } from '../reducers/userInfo'
 import { database } from '../config/config';
 
@@ -56,6 +62,27 @@ function CreatePostScreen({ navigation, route }) {
     </>
   );
 }
+
+function FindingScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Finding" component={MatchPage} />
+      <Stack.Screen name="FindingResult" component={ResultPage} />
+    </Stack.Navigator>
+  );
+}
+
+function LoginAndUpdateScreen({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
+    </Stack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 /*<Provider store={store}>*/
@@ -154,6 +181,14 @@ class Main extends Component {
               name="CreatePost"
               component={CreatePostScreen}
             />
+            <Tab.Screen
+            name="Finding"
+            component={FindingScreen}
+          />
+            <Tab.Screen
+            name="Login"
+            component={LoginAndUpdateScreen}
+          />
           </Tab.Navigator>
         </NavigationContainer>
       </Provider>
