@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
 }); 
 
 export const LoginScreen = ({ route, navigation }) => {
-
     return(
         <View style={styles.content}>
             <Image 
@@ -44,7 +43,7 @@ export const LoginScreen = ({ route, navigation }) => {
                 />
             <Text style={styles.title}> Sign In </Text>
             <View style={styles.panel}>
-                <LoginPanel navigation={navigation}/>
+                <LoginPanel navigation={navigation} updateLogin={route.params?.login}/>
             </View>
             <View style={styles.socialMedia}>
                 <SoicalMediaLoginPanel />

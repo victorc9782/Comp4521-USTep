@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
 import { database, storage, auth } from '../../config/config';
 
-var num_of_views = '154420';
-var loading = true ;
-var user = false;
+import EditGallery from '../UpdateInfo/EditGallery';
 
-const THIS_USER_ID = 3;
+var num_of_views = '154420';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -67,13 +65,12 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     }
 
-  }); 
+}); 
 
 function getUserData(_id) {
     let userData = [];
 
     database.ref('/users/' + _id).once('value',  snap => {
-        //console.log(snap.val()['name']);
         userData.push(snap.val()['name']);
         userData.push(snap.val()['description']);
         userData.push(snap.val()['department'])
@@ -150,9 +147,8 @@ async function loadData(user_id) {
 
     console.log('-- Finished Loading -- ');
 
-    return [true, wallpaper_image, icon_image, galleryArray, userData];
+    return [true , wallpaper_image, icon_image, galleryArray, userData];
 }
-
 
 export const ProfileScreen = ({ route, navigation }) => {
 
@@ -167,31 +163,33 @@ export const ProfileScreen = ({ route, navigation }) => {
         detail: '',
     });
 
-   let user_id = '';
-      
-    if(route.params?.id != null || route.params?.id != undefined) {
-        console.log([route.params?.id])
-        user_id = [route.params?.id]
-    } else if(auth.currentUser.uid) {
-        user_id = auth.currentUser.uid.toString();
-        user = true;
-    } else {
-        user_id = THIS_USER_ID;
-    }
-
+    const [edit, setEdit] = useState(false);
+    const [allowEdit, setAllowEdit] = useState(false);
+    const [user_id, setUser_id] = useState('');
+    const [isUser, setIsUser] = useState(false);
     
-    if(loading) {
-        loadData(user_id).then( result => {
-            loading = false;
-            setData({
-                loaded: result[0],
-                wallpaper: result[1],
-                icon: result[2],
-                gallery: result[3],
-                detail: result[4],
+    useEffect(() => {
+        setAllowEdit(true)
+
+        if(route.params?.id != null || route.params?.id != undefined ) {
+            setUser_id(route.params?.id);
+
+            if(route.params?.id == auth.currentUser.uid) {
+                setIsUser(true);
+            }
+
+            loadData(route.params?.id).then( result => {
+                setData({
+                    loaded: result[0],
+                    wallpaper: result[1],
+                    icon: result[2],
+                    gallery: result[3],
+                    detail: result[4],
+                })
             })
-        })
-    }
+        }
+
+    }, [route.params?.id]);
 
     return (
         <ScrollView>
@@ -218,17 +216,18 @@ export const ProfileScreen = ({ route, navigation }) => {
                     <Text style={styles.description}> {data['detail'][1]} </Text>
                     <Text style={styles.audience}>{data['detail'][2]}  | {num_of_views} views</Text>
                     {   
-                        user?
+                        isUser?
                         <View style={styles.buttonContainer}>
                         <Button
                             title="Update Profile"
                             style={styles.button}
-                            onPress={() => navigation.navigate('UpdateInfo')}
+                            onPress={() => navigation.navigate('UpdateInfo', {uid: user_id, goHome: true})}
                         />
                         <Button
                             title="EDIT GALLERY"
                             style={styles.button}
-                            onPress={() => navigation.navigate('Chat')}
+                            onPress={() => {
+                                setEdit(true)}}
                         />
                         </View>
                         :
@@ -244,7 +243,14 @@ export const ProfileScreen = ({ route, navigation }) => {
                             onPress={() => navigation.navigate('Chat')}
                         />
                         </View>
-                    }   
+                    } 
+                    { allowEdit?
+                        <EditGallery gallery={data['gallery']} open={edit} toggleEdit={(e) => {
+                            setEdit(e)
+                        }}/>
+                        :
+                        <View></View>
+                    }
                     <View style={styles.gallery}>
                         <FlatList
                             data = {data['gallery']}

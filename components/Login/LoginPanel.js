@@ -27,7 +27,6 @@ export default class LoginPanel extends Component {
     auth.createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
-        console.log(auth.currentUser.uid)
         navigation.navigate('UpdateInfo', {uid : auth.currentUser.uid})
       })
       .catch(err => {
@@ -42,6 +41,7 @@ export default class LoginPanel extends Component {
         console.log('Sign-In Success');
         //updateUser(auth.currentUser);
         console.log(auth.currentUser.uid)
+        this.props.updateLogin(true);
         navigation.navigate('Home');
       })
       .catch( err => {

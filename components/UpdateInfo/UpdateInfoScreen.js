@@ -48,7 +48,7 @@ export const UpdateInfoScreen = ({ route, navigation }) => {
                     </ImageBackground>
                 </View>
                 <View style={styles.card}>
-                   <UpdateInfoCard uid={route.params?.uid} navigation={navigation}/>
+                   <UpdateInfoCard uid={route.params?.uid} navigation={navigation} goHome={route.params?.goHome} updateLogin={route.params?.login}/>
                 </View>
             </View>
         </ScrollView>

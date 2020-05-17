@@ -69,6 +69,7 @@ function FindingScreen({ navigation, route }) {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Finding" component={MatchPage} />
       <Stack.Screen name="FindingResult" component={ResultPage} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }
@@ -77,7 +78,7 @@ function ProfileAndUpdateScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} initialParams={{id:auth.currentUser.uid}}/>
       <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
     </Stack.Navigator>
   );
@@ -87,8 +88,8 @@ function LoginAndUpdateScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} initialParams={{login: route.params?.login}}/>
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} initialParams={{login: route.params?.login}}/>
       <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
@@ -105,6 +106,11 @@ class Main extends Component {
     this.state = {
       login: auth.currentUser != null?true:false, 
     }
+    this.updateLogin = this.updateLogin.bind(this)
+  }
+
+  updateLogin(isLogged){
+    this.setState({login: isLogged});
   }
 
   async updateUserInfo() {
@@ -191,20 +197,21 @@ class Main extends Component {
             component={FindingScreen}
           />
             {this.state.login?
-            <Tab.Screen
-              name="Profile"
-              component={ProfileAndUpdateScreen}
-              options={{
-                tabBarIcon: ({ color, size }) => (
-                  <MaterialCommunityIcons name="account" color={color} size={size} />
-                ),
-              }}
-            />
-           :
-            <Tab.Screen
-            name="Login"
-            component={LoginAndUpdateScreen}
-            />
+              <Tab.Screen
+                name="Profile"
+                component={ProfileAndUpdateScreen}
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="account" color={color} size={size} />
+                  ),
+                }}
+              />
+            :
+              <Tab.Screen
+              name="Login"
+              component={LoginAndUpdateScreen}
+              initialParams={{login: this.updateLogin}}
+              />
             }
           </Tab.Navigator>
         </NavigationContainer>

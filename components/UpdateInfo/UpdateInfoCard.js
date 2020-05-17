@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, StyleSheet } from 'react-native'; 
-import { SocialIcon, Card, Button, Input, ButtonGroup, FormLabel, FormInput, FormValidationMessage} from 'react-native-elements'
-
+import { Text, View, StyleSheet } from 'react-native'; 
+import { Card, Button, Input, ButtonGroup} from 'react-native-elements'
 import { database, storage } from '../../config/config'
-import * as firebase from 'firebase';
-
 import UploadImageButton from './UploadImageButton'
 
 import RNPickerSelect from 'react-native-picker-select';
-import { BaseRouter } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     row: {
@@ -149,8 +145,12 @@ export default class UpdateInfoCard extends Component {
                 department, department,
             })
             .then(() => {
-                console.log('-- Finish Creating User --');
-                this.props.navigation.navigate('Profile', {id: _uid});
+                if(this.props.goHome == true) {
+                    this.props.navigation.goBack()
+                }else {
+                    console.log('-- Finish Creating User --');
+                    this.props.updateLogin(true);
+                }
             })
             .catch(err => {
                 console.log(err);
