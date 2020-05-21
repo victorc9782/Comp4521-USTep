@@ -6,7 +6,7 @@ import Chatroom from './Chatroom'
 import ChatroomList from './ChatroomList'
 import { database } from '../../config/config';
 
-const  myId=1;
+const  myId=3;
 function keyExtractor(item, index){
     return index.toString()
 }
@@ -53,6 +53,7 @@ export default function ChatroomListPage({ route, navigation}) {
         <Text>Chat Screen</Text>
         <ChatroomList 
         chatList={localUserInfo} 
+        numOfFrd={localUserInfo.length}
         onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item, myId: myId})}
         />
   

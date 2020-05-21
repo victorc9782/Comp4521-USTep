@@ -78,16 +78,36 @@ export default class Chatroom extends Component {
                 avatar: 'https://placeimg.com/140/140/any',
               }
              }
+             else{
+              messageUserInfo = {
+                _id: 2,
+                name: 'Not Me',
+                avatar: item.avatar_url,
+              }
+            }
+             
+             /*
+             else if (this.props.myId!=1 && message.user._id=="1"){
+              messageUserInfo = {
+                _id: 2,
+                name: 'Not Me',
+                avatar: item.avatar_url,
+              }
+             }
+             */
              //console.log(child.val());
              let formattedMessage = {
                _id: message._id,
                text: message.text,
                createdAt: new Date(message.createdAt),
+               /*
                user: {
                  _id: message.user._id,
                  name: 'Not me',
                  avatar: 'https://placeimg.com/140/140/any',
                },
+               */
+              user: messageUserInfo,
              }
              //console.log(formattedMessage)
              messages.push(formattedMessage)
