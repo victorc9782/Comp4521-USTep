@@ -43,6 +43,7 @@ export default class ProfileMiniCard extends Component {
               buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
               title='+ Friend' 
               type="clear"
+              onPress={() => this.props.onClickSendFriendRequest(this.props.uid)}
               />
 
             <Button

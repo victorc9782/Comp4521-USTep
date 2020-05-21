@@ -17,15 +17,12 @@ const styles = StyleSheet.create({
 })
 
 
-function EventBoard({ route, navigation, events }) {
+function EventBoard({ navigation, events }) {
     const keyExtractor = (item, key) => key.toString();
     const renderItem = ({ item }) =>
         <EventItem
-            title={item.title}
-            description={item.description}
-            date={item.date}
-            image_url={item.image_url}
-            location={item.location} />
+            navigation={navigation}
+            event={item} />
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -54,6 +51,7 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => {
+    dispatch(getEvents());
     dispatch(watchEventsChanged());
     return {};
 }
