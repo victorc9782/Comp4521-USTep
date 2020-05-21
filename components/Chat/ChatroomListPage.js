@@ -53,7 +53,7 @@ export default function ChatroomListPage({ route, navigation}) {
         <Text>Chat Screen</Text>
         <ChatroomList 
         chatList={localUserInfo} 
-        onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item})}
+        onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item, myId: myId})}
         />
   
         <Button title="Go to Chatroom" onPress={() => navigation.navigate('Chatroom')} />

@@ -13,11 +13,12 @@ export default class Chatroom extends Component {
   }
   state = {
     messages: [],
+    chatroomId: ""
   }
 
   componentDidMount() {
-    this.getChatRecord(inputChatroomId)
-    this._interval = setInterval(()=>{this.getChatRecord(inputChatroomId)},getChatRecordInterval)
+    this.getChatRecord(this.props.myId, this.props.item)
+    //this._interval = setInterval(()=>{this.getChatRecord(inputChatroomId)},getChatRecordInterval)
     
     /*
     this.setState({
@@ -39,36 +40,66 @@ export default class Chatroom extends Component {
   componentWillUnmount(){
     clearInterval(this._interval);
   }
-  async getChatRecord(chatroomId){
+  async getChatRecord(myId, item){
     console.log("getChatRecord")
+    console.log("myId:"+myId)
+    console.log("item:"+item)
+    console.log("fdId:"+item.id)
+    item.friends.map(child=>{
+      console.log(child)
+    })
     //console.log(new Date);
     let messages = []
-    await database.ref('/chatroom/'+chatroomId).once('value',  snap => {
-      console.log(snap);
-      snap.forEach(
-          child => {
-            let message = child.val();
-            //console.log(child.val());
-            let formattedMessage = {
-              _id: message._id,
-              text: message.text,
-              createdAt: new Date(message.createdAt),
-              user: {
-                _id: message.user._id,
-                name: 'React Native',
+    let friendList;
+    await database.ref('/users/'+myId+'/friends').once('value',  snap => {
+      //setMyFriendList(snap.value)
+      friendList = snap.value
+    }).then(async (friendList)=>{
+      chatroomId = inputChatroomId
+      friendList.forEach(fdchild=>{
+        console.log(fdchild.key+": "+fdchild.val())
+        if (fdchild.key==item.id){
+          //chatroomId = fdchild.val()
+          this.setState({chatroomId: fdchild.val()})
+        }
+        console.log("new chatroom id is: "+this.state.chatroomId)
+      })
+      console.log("Entering chatroom: "+this.state.chatroomId +"as user id: "+myId)
+      await database.ref('/chatroom/'+this.state.chatroomId).once('value',  snap => {
+       console.log(snap);
+       snap.forEach(
+           child => {
+             let message = child.val();
+             messageUserInfo = {}
+             if (message.user._id==this.props.myId){
+              messageUserInfo = {
+                _id: 1,
+                name: 'My Name',
                 avatar: 'https://placeimg.com/140/140/any',
-              },
-            }
-            //console.log(formattedMessage)
-            messages.push(formattedMessage)
-          }
-      )
+              }
+             }
+             //console.log(child.val());
+             let formattedMessage = {
+               _id: message._id,
+               text: message.text,
+               createdAt: new Date(message.createdAt),
+               user: {
+                 _id: message.user._id,
+                 name: 'Not me',
+                 avatar: 'https://placeimg.com/140/140/any',
+               },
+             }
+             //console.log(formattedMessage)
+             messages.push(formattedMessage)
+           }
+       )
+     })
+     console.log("getChatRecord End")
+     //console.log(messages)
+     messages.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1)
+     //messages.reverse()
+     this.setState({messages: messages})
     })
-    console.log("getChatRecord End")
-    //console.log(messages)
-    messages.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1)
-    //messages.reverse()
-    this.setState({messages: messages})
   }
   onSend(messages = []) {
     this.setState(previousState => ({
@@ -78,12 +109,16 @@ export default class Chatroom extends Component {
     console.log(messages)
     var currentDate = new Date()
     console.log(currentDate)
-    database.ref('/chatroom/' + inputChatroomId+'/'+messages[0]._id+'/')
+    database.ref('/chatroom/' + this.state.chatroomId+'/'+messages[0]._id+'/')
         .set({
           _id: messages[0]._id,
           text: messages[0].text,
           createdAt: ""+currentDate,
-          user:messages[0].user,
+          user:{
+            _id: this.props.myId,
+            name: "My Name",
+            avatar: 'https://placeimg.com/140/140/any',
+          },
         })
         .then(() => {
             console.log('Sent a new message');

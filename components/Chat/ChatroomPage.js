@@ -22,6 +22,8 @@ export function ChatroomPage({ route, navigation }) {
         />
         <Chatroom
           ChatroomStyle={{width: windowWidth}}
+          myId={route.params.myId}
+          item={route.params.item}
         />
   
         {
