@@ -1,11 +1,16 @@
 import React from 'react'
-import { View, Text, Button } from 'react-native'
-export function NotificationScreen({ route, navigation }) {
+import { SafeAreaView, Text, Button } from 'react-native'
+import { database } from '../../config/config';
+import { createStackNavigator } from "@react-navigation/stack"
 
+import NotificationPage from './NotificationPage'
+const Stack = createStackNavigator();
+
+const  myId="Mr2kGP1Qa8XE6BvgpEtZMpuEWvs2";
+export const NotificationScreen= () => {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Notification Screen</Text>
-            <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-        </View>
-    );
+        <Stack.Navigator>
+            <Stack.Screen name="Notification" component={NotificationPage} />
+        </Stack.Navigator>
+    )
 }
