@@ -20,7 +20,9 @@ const styles = StyleSheet.create({
         color: '#47525E',
         fontSize: 20,
         fontWeight: 'bold',
-        fontFamily: 'Roboto',
+    }, 
+    searchBar: {
+        paddingTop: 25,
     }
   });  
 
@@ -28,13 +30,15 @@ export const MatchPage = ({ route, navigation }) => {
     
     return (
         <View style={styles.contentContainer}>
-        <SearchBarView onSearch={()=>{navigation.navigate('FindingResult')}}/>
+        <View style={styles.searchBar}>
+            <SearchBarView navigation={navigation}/>
+        </View>
         <View style={styles.avatarcontainer}>
             <Avatar
                 containerStyle={styles.avatar}
                 size="xlarge"
                 rounded
-                onPress={() => navigation.navigate('FindingResult')}
+                onPress={() => SearchBarView.searchRandom(navigation)}
                 source={icon}
             />
             <Text style={styles.title}> Meet New Friends! </Text>

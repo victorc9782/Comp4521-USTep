@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
-import { database, storage } from '../../config/config';
+import { database, storage, auth } from '../../config/config';
 
-var num_of_followers = '5215';
+import EditGallery from '../UpdateInfo/EditGallery';
+
 var num_of_views = '154420';
-var loading = true ;
-var user = false;
-
-const THIS_USER_ID = 3;
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -68,15 +65,15 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     }
 
-  }); 
+}); 
 
 function getUserData(_id) {
     let userData = [];
 
     database.ref('/users/' + _id).once('value',  snap => {
-        //console.log(snap.val()['name']);
         userData.push(snap.val()['name']);
         userData.push(snap.val()['description']);
+        userData.push(snap.val()['department'])
     });
 
     return userData;
@@ -90,20 +87,22 @@ async function downloadImg (ref) {
 async function getWallpaperImage(_id) {
     const wallpaper_ref = storage.ref('user/' + _id + '/wallpaper/wallpaper.jpg');
     const promises = [];
-    
-    promises.push(downloadImg(wallpaper_ref));
 
+    promises.push(downloadImg(wallpaper_ref));
+    
     return Promise.all(promises);
 }
+
 
 async function getIconImage(_id) {
     const icon_ref = storage.ref('user/' + _id + '/icon/icon.jpg');
     const promises = [];
-    
-    promises.push(downloadImg(icon_ref));
 
+    promises.push(downloadImg(icon_ref));
+    
     return Promise.all(promises);
 }
+
 
 async function getGalleryImage(_id) {
     const gallery_ref = storage.ref('/user/' + _id + '/gallery');
@@ -119,30 +118,23 @@ async function getGalleryImage(_id) {
 }
 
 async function loadData(user_id) {
-    const assetArray = []
     const galleryArray = [];
-
-    console.log('Loading User Data...')
+    let wallpaper_image = 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
+    let icon_image = 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU';
 
     let userData = getUserData(user_id);
-    
-    console.log('Loading Icon...')
 
-    let wallpaper = await getWallpaperImage(user_id).then( result => {
-        return result[0];
+    await getWallpaperImage(user_id).then( result => {
+        wallpaper_image =  result[0];
     }).catch ( err => {
         console.log(err)
-        return 'https://www.logomyway.com/logos_new/8189/hkust_cse_department_20120531_02_747208955000.png';
     });
 
-    let icon = await getIconImage(user_id).then( result => {
-        return result[0];
+    await getIconImage(user_id).then( result => {
+        icon_image = result[0];
     }).catch ( err => {
         console.log(err)
-        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcReoRR0DLnFfhOnpHrH-QYXTJ8vFmjPKXrndXOc1q_tacP9Zx8X&usqp=CAU'
     });
-
-    console.log('Loading Gallery...')
 
     await getGalleryImage(user_id).then( result => {
         let counter = 0;
@@ -155,22 +147,13 @@ async function loadData(user_id) {
 
     console.log('-- Finished Loading -- ');
 
-    return [true, wallpaper, icon, galleryArray, userData];
+    return [true , wallpaper_image, icon_image, galleryArray, userData];
 }
-
 
 export const ProfileScreen = ({ route, navigation }) => {
 
     console.disableYellowBox = true;
     console.ignoredYellowBox = ['Setting a timer'];
-
-    let user_id = null;
-
-    if([route.params?.id] != null) {
-        user_id = [route.params?.id]
-    } else {
-        user_id = THIS_USER_ID;
-    }
 
     const [data, setData] = useState({
         loaded: false,
@@ -179,19 +162,34 @@ export const ProfileScreen = ({ route, navigation }) => {
         gallery: [],
         detail: '',
     });
+
+    const [edit, setEdit] = useState(false);
+    const [allowEdit, setAllowEdit] = useState(false);
+    const [user_id, setUser_id] = useState('');
+    const [isUser, setIsUser] = useState(false);
     
-    if(loading) {
-        loadData(user_id).then( result => {
-            loading = false;
-            setData({
-                loaded: result[0],
-                wallpaper: result[1],
-                icon: result[2],
-                gallery: result[3],
-                detail: result[4],
+    useEffect(() => {
+        setAllowEdit(true)
+
+        if(route.params?.id != null || route.params?.id != undefined ) {
+            setUser_id(route.params?.id);
+
+            if(route.params?.id == auth.currentUser.uid) {
+                setIsUser(true);
+            }
+
+            loadData(route.params?.id).then( result => {
+                setData({
+                    loaded: result[0],
+                    wallpaper: result[1],
+                    icon: result[2],
+                    gallery: result[3],
+                    detail: result[4],
+                })
             })
-        })
-    }
+        }
+
+    }, [route.params?.id]);
 
     return (
         <ScrollView>
@@ -216,19 +214,20 @@ export const ProfileScreen = ({ route, navigation }) => {
                     />
                     <Text style={styles.title}> {data['detail'][0]} </Text>
                     <Text style={styles.description}> {data['detail'][1]} </Text>
-                    <Text style={styles.audience}>{num_of_followers} followers | {num_of_views} views</Text>
+                    <Text style={styles.audience}>{data['detail'][2]}  | {num_of_views} views</Text>
                     {   
-                        user?
+                        isUser?
                         <View style={styles.buttonContainer}>
                         <Button
-                            title="UpLoad Image"
+                            title="Update Profile"
                             style={styles.button}
-                            onPress={() => navigation.navigate('Chat')}
+                            onPress={() => navigation.navigate('UpdateInfo', {uid: user_id, goHome: true})}
                         />
                         <Button
-                            title="Chat with Friends"
+                            title="EDIT GALLERY"
                             style={styles.button}
-                            onPress={() => navigation.navigate('Chat')}
+                            onPress={() => {
+                                setEdit(true)}}
                         />
                         </View>
                         :
@@ -244,7 +243,14 @@ export const ProfileScreen = ({ route, navigation }) => {
                             onPress={() => navigation.navigate('Chat')}
                         />
                         </View>
-                    }   
+                    } 
+                    { allowEdit?
+                        <EditGallery gallery={data['gallery']} open={edit} toggleEdit={(e) => {
+                            setEdit(e)
+                        }}/>
+                        :
+                        <View></View>
+                    }
                     <View style={styles.gallery}>
                         <FlatList
                             data = {data['gallery']}

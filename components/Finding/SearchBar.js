@@ -1,29 +1,6 @@
 import React, { Component } from "react";
 import { SearchBar } from 'react-native-elements';
-
-function search(keywords){
-    const list= [
-    {name: 'Chan Kin Lok', description: 'Engineering Freshman' ,image: require('../../assets/gallery1.jpg'),id: '1'},
-    {name: 'Tai Man Ho', description: 'HKU Exchanger' ,image: require('../../assets/gallery2.jpg'),id: '2'},
-    {name: 'Lee Ka Shing', description: 'Elec Lover' ,image: require('../../assets/gallery3.jpg'),id: '3'},
-    {name: 'Ho Ka Chiu', description: 'CPEG Year4 Student' ,image: require('../../assets/gallery4.jpg'),id: '4'},
-    {name: 'Ip Tse Chun', description: 'Math2011 retaker' ,image: require('../../assets/gallery5.jpg'),id: '5'},
-    {name: 'Yu Sheung Lam', description: 'CS student' ,image: require('../../assets/gallery6.jpg'),id: '6'},
-    {name: 'Johnny James', description: 'American' ,image: require('../../assets/gallery7.jpg'),id: '7'},
-    {name: 'Li Sum', description: 'Student Union committee' ,image: require('../../assets/gallery8.jpg'),id: '8'},
-    {name: 'Chan Tai Man', description: '',image: require('../../assets/gallery9.jpg'),id: '9'},];
-
-    let resultList = [];
-
-    for(let target of list) {
-        if(target.name === keywords || target.id === keywords) {
-            resultList.push(target);
-        }
-    }
-
-    this.props.onSearch;
-}
-
+import { database } from '../../config/config';
 
 export default class SearchBarView extends React.Component {
   state = {
@@ -34,6 +11,71 @@ export default class SearchBarView extends React.Component {
     this.setState({ search });
   };
 
+  search (keywords) {
+    let resultList = [];
+
+    Promise.all([
+      database.ref("users/").orderByChild("firstName").equalTo(keywords).once('value').then( res => {
+        res.forEach( snapshot => {
+          resultList.push({uid: snapshot.val().uid, image: {uri: snapshot.val().avatar_url}, name: snapshot.val().name, description: snapshot.val().description})
+        })
+      }),
+      database.ref("users/").orderByChild("lastName").equalTo(keywords).once('value').then( res => {
+        res.forEach( snapshot => {
+          resultList.push({uid: snapshot.val().uid, image: {uri: snapshot.val().avatar_url}, name: snapshot.val().name, description: snapshot.val().description})
+        })
+      }),
+      database.ref("users/").orderByChild("name").equalTo(keywords).once('value').then( res => {
+        res.forEach( snapshot => {
+          resultList.push({uid: snapshot.val().uid, image: {uri: snapshot.val().avatar_url}, name: snapshot.val().name, description: snapshot.val().description})
+        })
+      }),
+      database.ref("users/").orderByChild("uid").equalTo(keywords).once('value').then( res => {
+        res.forEach( snapshot => {
+          resultList.push({uid: snapshot.val().uid, image: {uri: snapshot.val().avatar_url}, name: snapshot.val().name, description: snapshot.val().description})
+        })
+      })
+    ])
+      .then(() => {
+        console.log(resultList)
+        this.props.navigation.navigate('FindingResult', {list: resultList})
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+static searchRandom (nav) {
+    let resultList = [];
+
+    const hobbyList = [
+      { label: 'Football', value: 'football' },
+      { label: 'Baseball', value: 'baseball' },
+      { label: 'Hockey', value: 'hockey' },
+      { label: 'Music', value: 'music' },
+      { label: 'Movie', value: 'movie' },
+      { label: 'Hockey', value: 'hockey' },
+      { label: 'Shopping', value: 'shopping' },
+      { label: 'Hiking', value: 'hiking' },
+      { label: 'Swimming', value: 'swimming' },
+    ];
+
+    Promise.all([
+      database.ref("users/").orderByChild("hobbies").equalTo(hobbyList[0].value).once('value').then( res => {
+        res.forEach( snapshot => {
+          resultList.push({uid: snapshot.val().uid, image: {uri: snapshot.val().avatar_url}, name: snapshot.val().name, description: snapshot.val().description})
+        })
+      })
+    ])
+      .then(() => {
+        console.log(resultList)
+        nav.navigate('FindingResult', {list: resultList})
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   render() {
     const { search } = this.state;
 
@@ -43,7 +85,9 @@ export default class SearchBarView extends React.Component {
         platform='android'
         onChangeText={this.updateSearch}
         value={search}
-        onSubmitEditing={search}
+        onSubmitEditing={() => { 
+          this.search(this.state.search)
+        }}
       />
     );
   }

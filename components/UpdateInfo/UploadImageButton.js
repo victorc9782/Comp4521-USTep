@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as ImagePicker from 'expo-image-picker';
-import {View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import {View, Text, Image } from "react-native";
 import { Button } from 'react-native-elements'
 
 export default class PhotoPickerScreen extends Component {
@@ -17,7 +17,7 @@ export default class PhotoPickerScreen extends Component {
     });
     if (!result.cancelled) {
      this.setState({ image: result.uri });
-     this.props.updateProfilePath(result.uri.toString());
+     this.props.updateImagePath(result.uri.toString());
     }
    }
 
@@ -29,13 +29,17 @@ export default class PhotoPickerScreen extends Component {
     <View style={{ justifyContent: 'center', alignItems: 'center'}}>
         {image && 
         <View style={{ justifyContent: 'center', alignItems: 'center'}}>
-        <Text> Profile Image </Text>
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        <Text style={{ fontWeight:'bold'}}> {this.props.title} </Text>
+        <Image source={{ uri: image }} style={{
+          width: 85, 
+          height: 85, 
+          borderRadius: 85 / 2, 
+          }} />
         </View>}
     </View>
      <Button 
        onPress={this._getPhotoLibrary.bind(this)} 
-       title="Upload Profile Image"
+       title= {"Upload " + this.props.title }
        type='clear'
      />
      </View>

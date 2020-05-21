@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { View , StyleSheet, FlatList } from 'react-native';
+import { View , StyleSheet } from 'react-native';
 import { Card, Button, Text, Avatar } from 'react-native-elements';
-
-import ProfileScreen from './ProfileScreen';
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -13,12 +11,10 @@ const styles = StyleSheet.create({
       color: '#47525E',
       fontSize: 16,
       fontWeight: 'bold',
-      fontFamily: 'Roboto',
   },
   description: {
       paddingTop: 7, 
       color: '#8492A6',
-      fontFamily: 'Roboto',
       fontSize: 12,
   },buttonGroup: {
     flexDirection: 'row'
