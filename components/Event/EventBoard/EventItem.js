@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, Text, Dimensions, TouchableOpacity } from "react-native";
-import Calendar from 'dayjs/plugin/calendar';
-import dayjs from 'dayjs';
+import { translateDateOnEventBoard } from './helperFunctions';
+import { storage } from '../../../config/config';
+
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
@@ -40,20 +41,35 @@ const styles = StyleSheet.create({
     }
 });
 
-const EventItem = ({ title, description, date, location, image_url }) => {
+const EventItem = ({ navigation, event }) => {
+
+    const [hostProfileURL, setHostProfileURL] = useState(null);
+
+    useEffect(() => {
+        storage.ref('user/' + event.host + '/icon/icon.jpg').getDownloadURL().then(
+            data => {
+                setHostProfileURL(data)
+                console.log('TESTING')
+            }
+        ).catch(
+            error => console.log(error)
+        )
+    }, [])
+
+
     return (
-        <TouchableOpacity onPress={() => {console.log("Testing")}}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Event Details', { event: event }) }}>
             <View style={styles.container}>
                 <View style={styles.container_text}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.description}>{description}</Text>
+                    <Text style={styles.title}>{event.eventName}</Text>
+                    <Text style={styles.description}>{event.description}</Text>
                     <View style={[styles.wrapper]}>
-                        <Text style={styles.info}>{dateTranslate(date)} • </Text>
-                        <Text style={styles.info}>{location}</Text>
+                        <Text style={styles.info}>{translateDateOnEventBoard(event.startDate)} • </Text>
+                        <Text style={styles.info}>{event.location}</Text>
                     </View>
-                    <View style={styles.wrapper}>
-                        <Image style={styles.avatar} source={{ uri: image_url }} />
-                    </View>
+                    {<View style={styles.wrapper}>
+                        <Image style={styles.avatar} source={{ uri: hostProfileURL }} />
+                    </View>}
                 </View>
             </View>
         </TouchableOpacity>
@@ -61,17 +77,4 @@ const EventItem = ({ title, description, date, location, image_url }) => {
 }
 
 
-function dateTranslate(date) {
-    var datetime = dayjs(date);
-    dayjs.extend(Calendar);
-    var calendartime = datetime.calendar(dayjs(), {
-        sameDay: '[Today at] h:mm A', // The same day ( Today at 2:30 AM )
-        nextDay: '[Tomorrow at] h:mm A', // The next day ( Tomorrow at 2:30 AM )
-        nextWeek: 'dddd [at] h:mm A', // The next week ( Sunday at 2:30 AM )
-        lastDay: '[Yesterday at] h:mm A', // The day before ( Yesterday at 2:30 AM )
-        lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
-        sameElse: 'ddd, D MMM [at] h:mm A' // Everything else ( Sun, Mar 12 at 2:30 AM )
-    });
-    return (calendartime);
-}
 export default EventItem;
