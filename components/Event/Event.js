@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack"
 import EventBoard from "./EventBoard/EventBoard";
 import { CreateEvent } from "./CreateEvent/CreateEvent";
-import { EventDetails } from "./EventDetails/EventDetails";
+import EventDetails from "./EventDetails/EventDetails";
 
 const Stack = createStackNavigator();
 

@@ -1,11 +1,11 @@
-import { database } from "firebase";
+import { database } from "../config/config";
 
 export const FETCH_USERINFO = 'FETCH_USERINFO';
 export const UPDATE_USERINFO = 'UPDATE_USERINFO';
 export const fetchUserInfo = (payload) => ({ type: FETCH_USERINFO, payload });
 export const updateUserInfoState = (payload) => ({ type: UPDATE_USERINFO, payload });
 
-export function getUserInfo() {
+/* export function getUserInfo() {
   return dispatch => {
     const users = [];
     database.ref('/users').once('value', snap => {
@@ -13,26 +13,27 @@ export function getUserInfo() {
         users.push(child.val()));
     }).then(dispatch(fetchUserInfo(users)));
   }
-}
+} */
 
-export function updateUserInfo() {
+export function watchUserInfoChange() {
   return dispatch => {
     database.ref('/users').on('value', snap => {
-      const users = [];
-      snap.forEach(child =>
-        users.push(child.val()));
-      dispatch(updateUserInfo(users))
+      dispatch(updateUserInfoState(snap.val()))
     });
   }
 }
 
+const initialState = {
+  loading: true,
+}
 
-const userInfo = (state = [], { type, payload }) => {
+const userInfo = (state = initialState, { type, payload }) => {
   switch (type) {
-    case FETCH_USERINFO:
-      return payload;
-    case UPDATE_EVENTS:
-      return payload;
+    case UPDATE_USERINFO:
+      return {
+        users: payload,
+        loading: false
+      };
     default:
       return state;
   }

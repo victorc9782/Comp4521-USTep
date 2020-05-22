@@ -17,13 +17,26 @@ export function translateDateOnEventBoard(date) {
     return (calendartime);
 }
 
+export function translateDateOnEventDetails(date) {
+    var datetime = dayjs(date);
+    dayjs.extend(Calendar);
+    var calendartime = datetime.calendar(dayjs(), {
+        sameDay: '[Today]', // The same day ( Today at 2:30 AM )
+        nextDay: '[Tomorrow]', // The next day ( Tomorrow at 2:30 AM )
+        nextWeek: 'dddd', // The next week ( Sunday at 2:30 AM )
+        lastDay: '[Yesterday]', // The day before ( Yesterday at 2:30 AM )
+        lastWeek: '[Last] dddd', // Last week ( Last Monday at 2:30 AM )
+        sameElse: 'ddd, D MMM' // Everything else ( Sun, Mar 12 at 2:30 AM )
+    });
+    return (calendartime);
+}
 
 export function translateDateOnCreateEvent(date) {
     var datetime = dayjs(date);
     return datetime.format('ddd, MMM D YYYY');
 }
 
-export function translateTimeOnCreateEvent(date) {
+export function translateTimeOnEvent(date) {
     var datetime = dayjs(date);
     return datetime.format('hh:mm A');
 }

@@ -49,7 +49,6 @@ const EventItem = ({ navigation, event }) => {
         storage.ref('user/' + event.host + '/icon/icon.jpg').getDownloadURL().then(
             data => {
                 setHostProfileURL(data)
-                console.log('TESTING')
             }
         ).catch(
             error => console.log(error)
@@ -58,13 +57,13 @@ const EventItem = ({ navigation, event }) => {
 
 
     return (
-        <TouchableOpacity onPress={() => { navigation.navigate('Event Details', { event: event }) }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Event Details', { event: event, hostProfileURL }) }}>
             <View style={styles.container}>
                 <View style={styles.container_text}>
                     <Text style={styles.title}>{event.eventName}</Text>
                     <Text style={styles.description}>{event.description}</Text>
                     <View style={[styles.wrapper]}>
-                        <Text style={styles.info}>{translateDateOnEventBoard(event.startDate)} • </Text>
+                        <Text style={styles.info}>{translateDateOnEventBoard(event.startDateTime)} • </Text>
                         <Text style={styles.info}>{event.location}</Text>
                     </View>
                     {<View style={styles.wrapper}>

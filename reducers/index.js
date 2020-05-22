@@ -4,6 +4,6 @@ import { events } from './events';
 
 
 export const combinedStore = combineReducers({
-  /* userInfo, */
+  userInfo,
   events,
 });

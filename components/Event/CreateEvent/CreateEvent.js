@@ -4,7 +4,7 @@ import { Input } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { translateDateOnCreateEvent, translateTimeOnCreateEvent } from '../EventBoard/helperFunctions';
+import { translateDateOnCreateEvent, translateTimeOnEvent } from '../EventBoard/helperFunctions';
 import { database, auth } from '../../../config/config';
 
 export const CreateEvent = ({ route, navigation }) => {
@@ -46,13 +46,15 @@ export const CreateEvent = ({ route, navigation }) => {
     }
 
     const postEvent = () => {
-        database.ref('/events').push({
+        const uid = new Date().toJSON().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+        database.ref('/events/' + uid).set({
             startDateTime: startDateTime.toJSON(),
             endDateTime: endDateTime.toJSON(),
             eventName: eventName,
             location: location,
             host: auth.currentUser.uid,
             description: description,
+            uid: uid,
         })
     }
 
@@ -82,7 +84,7 @@ export const CreateEvent = ({ route, navigation }) => {
                         </View>
                         <View style={{ flex: 4, borderBottomColor: 'grey', borderBottomWidth: 1, marginLeft: Dimensions.get("window").width * 0.035, justifyContent: "center" }}>
                             <TouchableOpacity onPress={() => showDatepicker('time')('startDateTime')}>
-                                <Text style={{ color: 'grey', fontSize: Dimensions.get("window").fontScale * 18 }}>{translateTimeOnCreateEvent(startDateTime)}</Text>
+                                <Text style={{ color: 'grey', fontSize: Dimensions.get("window").fontScale * 18 }}>{translateTimeOnEvent(startDateTime)}</Text>
                             </TouchableOpacity >
                         </View>
                     </View>
@@ -97,7 +99,7 @@ export const CreateEvent = ({ route, navigation }) => {
                         </View>
                         <View style={{ flex: 4, borderBottomColor: 'grey', borderBottomWidth: 1, marginLeft: Dimensions.get("window").width * 0.035, justifyContent: "center" }}>
                             <TouchableOpacity onPress={() => showDatepicker('time')('endDateTime')}>
-                                <Text style={{ color: 'grey', fontSize: Dimensions.get("window").fontScale * 18 }}>{translateTimeOnCreateEvent(endDateTime)}</Text>
+                                <Text style={{ color: 'grey', fontSize: Dimensions.get("window").fontScale * 18 }}>{translateTimeOnEvent(endDateTime)}</Text>
                             </TouchableOpacity >
                         </View>
                     </View>
