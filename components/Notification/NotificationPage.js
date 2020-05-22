@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, FlatList, View, Text, Button } from 'react-native'
 import { connect } from 'react-redux';
 import { updateUserInfo } from '../../reducers/userInfo'
+import { database } from '../../config/config';
 import FriendRequestList from './FriendRequestList.js'
 const  myId="Mr2kGP1Qa8XE6BvgpEtZMpuEWvs2";
 
@@ -15,6 +16,38 @@ const styles = StyleSheet.create({
     },
 })
 
+function gen4() {
+    return Math.random().toString(16).slice(-4)
+}
+
+function simpleUniqueId(prefix) {
+    return (prefix || '').concat([
+      gen4(),
+      gen4(),
+      gen4(),
+      gen4(),
+      gen4(),
+      gen4(),
+      gen4(),
+      gen4()
+    ].join(''))
+}
+function becomeFriends(userAid, userBid, chatroomId){
+    database.ref('/users/'+userAid+'/friends/'+userBid).set(chatroomId)
+    database.ref('/users/'+userBid+'/friends/'+userAid).set(chatroomId)
+}
+function onAcceptFriendRequest(item){
+    console.log("onAcceptFriendRequest")
+    console.log(item)
+    var newChatroomId = simpleUniqueId("")
+    becomeFriends(myId, item.id, newChatroomId)
+    removeFriendRequest(item)
+}
+function removeFriendRequest(item){
+    console.log("removeFriendRequest")
+    console.log("Remove "+item.id)
+    database.ref('/users/'+myId+'/friendRequests/'+item.id).remove()
+}
 function NotificationPage({ route, navigation, userInfo }) {
     const keyExtractor = (item, key) => key.toString();
     const renderItem = ({ item }) => (
@@ -26,9 +59,12 @@ function NotificationPage({ route, navigation, userInfo }) {
     //console.log(userInfo[myId]["friendRequests"])
     return (
         <View style={styles.container}>
-            <Text>Notification Page</Text>
             <FriendRequestList
                 userInfo={userInfo[myId]}
+                allUser={userInfo}
+                onAcceptFriendRequest={(item)=>onAcceptFriendRequest(item)}
+                onDeclineFriendRequest={(item)=>onDeclineFriendRequest(item)}
+                onClickUser={(item)=> navigation.navigate("FriendRequest",{ item: item})}
             />
             
             <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
