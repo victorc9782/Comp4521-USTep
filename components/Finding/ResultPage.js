@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 export const ResultPage = ({ route, navigation }) => {
 
   const sendFriendRequest = (targetUserUID) => {
-    database.ref('/users/' + auth.currentUser.uid).child('/friends/pending/' + targetUserUID).set(true)
+    database.ref('/users/' + auth.currentUser.uid).child('/friendsPending/' + targetUserUID).set(true)
     database.ref('/users/' + targetUserUID + '/friendRequests/' + auth.currentUser.uid).set(true)
   }
 
