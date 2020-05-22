@@ -66,7 +66,7 @@ class FriendRequestList extends Component {
       </View>
     )
   render() {
-      if (this.props.userInfo){
+      if (this.props.userInfo && this.props.userInfo["friendRequests"]){
         console.log("Info")
           console.log(this.props.userInfo)
         console.log("FriendRequestList")
@@ -89,6 +89,7 @@ class FriendRequestList extends Component {
       }
       return (
         <SafeAreaView>
+        <Text>You got no new notification</Text>
         </SafeAreaView>
       );
   }   

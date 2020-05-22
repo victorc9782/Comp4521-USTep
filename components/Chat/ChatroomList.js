@@ -23,7 +23,7 @@ class ChatroomList extends Component {
       />
     )
   render() {
-    if (this.props.userInfo){
+    if (this.props.userInfo && this.props.userInfo["friends"]){
       console.log("userInfo")
       console.log(this.props.userInfo)
     //     console.log(this.props.allUser)
@@ -44,6 +44,7 @@ class ChatroomList extends Component {
     }
     return (
       <SafeAreaView>
+        <Text>You are not having any friends now. Go to meet some new friends.</Text>
       </SafeAreaView>
     );
   }   
