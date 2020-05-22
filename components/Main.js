@@ -15,7 +15,9 @@ import { ProfileScreen } from './Profile/ProfileScreen'
 import ChatroomListPage from './Chat/ChatroomListPage'
 import { ChatroomPage } from './Chat/ChatroomPage'
 import { Event } from './Event/Event'
-import { NotificationScreen } from './Notification/NotificationScreen'
+
+import NotificationPage from './Notification/NotificationPage'
+import FriendRequestPage from './Notification/FriendRequestPage'
 
 import { ResultPage } from './Finding/ResultPage'
 import { MatchPage } from './Finding/MatchPage'
@@ -34,12 +36,20 @@ function ChatScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
-      <Stack.Screen name="ChatroomList" component={ChatroomListPage} />
+      <Stack.Screen name="ChatroomList" component={ChatroomListPage} initialParams={{id:auth.currentUser.uid}}/>
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
     </Stack.Navigator>
   );
 }
-
+function NotificationScreen({ navigation, route }){
+  const Stack = createStackNavigator();
+  return (
+      <Stack.Navigator>
+          <Stack.Screen name="Notification" component={NotificationPage} initialParams={{id:auth.currentUser.uid}}/>
+          <Stack.Screen name="FriendRequest" component={FriendRequestPage} />
+      </Stack.Navigator>
+  )
+}
 function CreatePostScreen({ navigation, route }) {
   const [postText, setPostText] = React.useState('');
 
@@ -161,6 +171,7 @@ class Main extends Component {
                 ),
               }}
             />
+            {this.state.login&&
             <Tab.Screen
               name="Chat"
               component={ChatScreen}
@@ -170,6 +181,8 @@ class Main extends Component {
                 ),
               }}
             />
+            }
+            {this.state.login&&
             <Tab.Screen
               name="Event"
               component={Event}
@@ -179,6 +192,8 @@ class Main extends Component {
                 ),
               }}
             />
+            }
+            {this.state.login&&
             <Tab.Screen
               name="Notification"
               component={NotificationScreen}
@@ -188,6 +203,7 @@ class Main extends Component {
                 ),
               }}
             />
+            }
             <Tab.Screen
               name="CreatePost"
               component={CreatePostScreen}

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Text, View, TextInput, FlatList, SafeAreaView, Dimensions, StyleSheet } from 'react-native';
-import { ListItem, Button, Icon } from 'react-native-elements';
+import { ListItem, Button, Icon, CheckBox } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -29,7 +29,8 @@ class FriendRequestList extends Component {
   constructor(props) {
     super(props)
     this.state={
-      userInfo: null
+      userInfo: null,
+      showNotificationCount: true
     }
   }
     keyExtractor = (requestId, value) => index.toString()
@@ -65,7 +66,11 @@ class FriendRequestList extends Component {
         </View>
       </View>
     )
+    toggleNotificationStatus(){
+      this.setState({showNotificationCount: false})
+    }
   render() {
+    const {showNotificationCount} = this.state
       if (this.props.userInfo && this.props.userInfo["friendRequests"]){
         console.log("Info")
           console.log(this.props.userInfo)
@@ -76,7 +81,20 @@ class FriendRequestList extends Component {
         console.log(requestList)
         return (
           <SafeAreaView>
-            <Text>You got {requestList.length} friendRequests</Text>
+            {showNotificationCount &&
+            <Button
+              title={"You got "+requestList.length+" new friend request(s)."}
+              type="outline"
+              icon={
+                <Icon
+                  name='cancel'
+                  size={20}
+                  color="#2ca7d4"
+                />
+              }
+              iconRight
+              onPress={()=>this.toggleNotificationStatus()}
+            />}
             <FlatList
               //keyExtractor={this.keyExtractor}
               data={requestList}
@@ -89,7 +107,20 @@ class FriendRequestList extends Component {
       }
       return (
         <SafeAreaView>
-        <Text>You got no new notification</Text>
+        {showNotificationCount &&
+        <Button
+          title="You got no new notification"
+          type="outline"
+          icon={
+            <Icon
+              name='cancel'
+              size={20}
+              color="#2ca7d4"
+            />
+          }
+          iconRight
+          onPress={()=>this.toggleNotificationStatus()}
+        />}
         </SafeAreaView>
       );
   }   

@@ -6,7 +6,7 @@ import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
 const getChatRecordInterval = 3000;
-const inputChatroomId = '001';
+//const inputChatroomId = '001';
 export default class Chatroom extends Component {
   constructor(props) {
     super(props)
@@ -52,7 +52,7 @@ export default class Chatroom extends Component {
       //setMyFriendList(snap.value)
       friendList = snap.value
     }).then(async (friendList)=>{
-      chatroomId = inputChatroomId
+      //chatroomId = inputChatroomId
       friendList.forEach(fdchild=>{
         console.log(fdchild.key+": "+fdchild.val())
         if (fdchild.key==item.uid){

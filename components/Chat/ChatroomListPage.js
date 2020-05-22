@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { updateUserInfo } from '../../reducers/userInfo'
 import { database } from '../../config/config';
 import ChatroomList from './ChatroomList.js'
-const  myId="Mr2kGP1Qa8XE6BvgpEtZMpuEWvs2";
+//const  myId="Mr2kGP1Qa8XE6BvgpEtZMpuEWvs2";
 
 
 const styles = StyleSheet.create({
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
 })
 
 function ChatroomListPage({ route, navigation, userInfo }) {
+    const myId = route.params?.id 
     const keyExtractor = (item, key) => key.toString();
     const renderItem = ({ item }) => (
         <Text>{item.val()}</Text>
