@@ -1,64 +1,62 @@
 import React from 'react'
-import { View, Text, Button, FlatList, ScrollView, SafeAreaView } from 'react-native'
-import { ListItem } from 'react-native-elements';
-
-import Chatroom from './Chatroom'
-import ChatroomList from './ChatroomList'
+import { StyleSheet, FlatList, View, Text, Button } from 'react-native'
+import { connect } from 'react-redux';
+import { updateUserInfo } from '../../reducers/userInfo'
 import { database } from '../../config/config';
+import ChatroomList from './ChatroomList.js'
+const  myId="Mr2kGP1Qa8XE6BvgpEtZMpuEWvs2";
 
-const  myId=3;
-function keyExtractor(item, index){
-    return index.toString()
-}
-export default function ChatroomListPage({ route, navigation}) {
-  
-  let localUserInfo = []
-  var myFriendList = []
-  console.log("My friend list")
-  database.ref('/users/'+myId+'/friends').once('value',  snap => {
-    myFriendList = snap.value;
-  }).then((myFriendList)=>{
-      console.log("My friend list:\n"+myFriendList)
-      myFriendList.forEach(child=>{
-        console.log(child.key+": "+child.val())
-        
-      })
-      console.log("ChatroomListPage Read ref")
-      console.log(database.ref('/users'));
-      database.ref('/users').once('value',  snap => {
-        console.log(snap);
-        snap.forEach(
-            child => {
-              var isFriend = false;
-              console.log(child.val());
-              
-              myFriendList.forEach(fdchild=>{
-                if (fdchild.key==child.key){
-                  isFriend = true;
-                }
-              })
 
-              if (isFriend){
-                localUserInfo.push(child.val());
-              }
-            }
-        )
-      })
-      console.log("ChatroomListPage Read ref end")
-    }
-  )
-  
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollView: {
+        backgroundColor: 'white'
+    },
+})
+
+function ChatroomListPage({ route, navigation, userInfo }) {
+    const keyExtractor = (item, key) => key.toString();
+    const renderItem = ({ item }) => (
+        <Text>{item.val()}</Text>
+    )
+    console.log("ChatroomListPage")
+    console.log(userInfo)
+    console.log(userInfo[myId])
+    //console.log(userInfo[myId]["friendRequests"])
     return (
-      <SafeAreaView style={{  flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Chat Screen</Text>
-        <ChatroomList 
-        chatList={localUserInfo} 
-        numOfFrd={localUserInfo.length}
-        onClickChatRoomUser={(item)=> navigation.navigate('Chatroom',{ item: item, myId: myId})}
-        />
-  
-        <Button title="Go to Chatroom" onPress={() => navigation.navigate('Chatroom')} />
-      </SafeAreaView>
-      
+        <View style={styles.container}>
+            <ChatroomList
+                userInfo={userInfo[myId]}
+                allUser={userInfo}
+                onAcceptFriendRequest={(item)=>onAcceptFriendRequest(item)}
+                onDeclineFriendRequest={(item)=>onDeclineFriendRequest(item)}
+                onClickChatRoomUser={(item)=> navigation.navigate("Chatroom",{ item: item, myId: myId})}
+            />
+            
+            <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+        </View>
     );
 }
+const renderSeparator = () => {
+    return (
+        <View
+            style={{
+                height: 1,
+                backgroundColor: "#CED0CE",
+            }}
+        />
+    );
+};
+const mapState = state => ({
+    userInfo: state.userInfo,
+})
+
+const mapDispatch = dispatch => {
+    /* dispatch(getEvents()); */
+    dispatch(updateUserInfo());
+    return {};
+}
+
+export default connect(mapState, mapDispatch)(ChatroomListPage);

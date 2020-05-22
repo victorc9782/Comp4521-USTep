@@ -14,16 +14,16 @@ export function ChatroomPage({ route, navigation }) {
     return (
       <SafeAreaView style={{  flex: 1, alignItems: 'stretch', justifyContent: 'center', width: windowWidth }}>       
         <ListItem
-          title={route.params?.item.name}
+          title={route.params?.item.info.name}
           subtitle={route.params?.item.subtitle}
-          leftAvatar={{ source: { uri: route.params?.item.avatar_url } }}
+          leftAvatar={{ source: { uri: route.params?.item.info.avatar_url } }}
           bottomDivider
           chevron
         />
         <Chatroom
           ChatroomStyle={{width: windowWidth}}
           myId={route.params.myId}
-          item={route.params.item}
+          item={route.params.item.info}
         />
   
         {

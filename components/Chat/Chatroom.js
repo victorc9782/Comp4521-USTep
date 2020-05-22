@@ -44,10 +44,7 @@ export default class Chatroom extends Component {
     console.log("getChatRecord")
     console.log("myId:"+myId)
     console.log("item:"+item)
-    console.log("fdId:"+item.id)
-    item.friends.map(child=>{
-      console.log(child)
-    })
+    console.log("fdId:"+item.uid)
     //console.log(new Date);
     let messages = []
     let friendList;
@@ -58,7 +55,7 @@ export default class Chatroom extends Component {
       chatroomId = inputChatroomId
       friendList.forEach(fdchild=>{
         console.log(fdchild.key+": "+fdchild.val())
-        if (fdchild.key==item.id){
+        if (fdchild.key==item.uid){
           //chatroomId = fdchild.val()
           this.setState({chatroomId: fdchild.val()})
         }
@@ -70,7 +67,7 @@ export default class Chatroom extends Component {
        snap.forEach(
            child => {
              let message = child.val();
-             messageUserInfo = {}
+             var messageUserInfo = {}
              if (message.user._id==this.props.myId){
               messageUserInfo = {
                 _id: 1,
@@ -129,6 +126,7 @@ export default class Chatroom extends Component {
     console.log(messages)
     var currentDate = new Date()
     console.log(currentDate)
+    console.log("Sending Message to :"+ this.state.chatroomId)
     database.ref('/chatroom/' + this.state.chatroomId+'/'+messages[0]._id+'/')
         .set({
           _id: messages[0]._id,

@@ -9,32 +9,41 @@ const windowWidth = Dimensions.get('window').width;
 class ChatroomList extends Component {
   constructor(props) {
     super(props)
-    this.state={
-      userInfo: null
-    }
   }
     keyExtractor = (item, index) => index.toString()
     
     renderItem = ({ item }) => (
       <ListItem
-        title={item.name}
+        title={item.info.name}
         //subtitle={item.subtitle}
-        leftAvatar={{ source: { uri: item.avatar_url } }}
+        leftAvatar={{ source: { uri: item.info.avatar_url } }}
         bottomDivider
         chevron
         onPress={()=>{this.props.onClickChatRoomUser(item)}}
       />
     )
   render() {
+    if (this.props.userInfo){
+      console.log("userInfo")
+      console.log(this.props.userInfo)
+    //     console.log(this.props.allUser)
+      var requestList = Object.keys(this.props.userInfo["friends"]).reduce((array, key) => {
+        return [...array, {id: key, value: this.props.userInfo["friends"][key], info: this.props.allUser[key]}]
+    }, [])
+    return(
+    <SafeAreaView>
+      <FlatList
+        keyExtractor={this.keyExtractor}
+        //data={this.props.chatList}
+        data={requestList}
+        renderItem={this.renderItem}
+        style={{width:windowWidth}}
+      /> 
+    </SafeAreaView>
+    )
+    }
     return (
       <SafeAreaView>
-        <FlatList
-          keyExtractor={this.keyExtractor}
-          data={this.props.chatList}
-          //data={this.state.userinfo}
-          renderItem={this.renderItem}
-          style={{width:windowWidth}}
-        />
       </SafeAreaView>
     );
   }   
