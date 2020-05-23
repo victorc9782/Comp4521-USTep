@@ -46,7 +46,7 @@ function NotificationScreen({ navigation, route }){
   return (
       <Stack.Navigator>
           <Stack.Screen name="Notification" component={NotificationPage} initialParams={{id:auth.currentUser.uid}}/>
-          <Stack.Screen name="FriendRequest" component={FriendRequestPage} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
       </Stack.Navigator>
   )
 }
@@ -158,11 +158,11 @@ class Main extends Component {
       <Provider store={store}>
         <NavigationContainer>
           <Tab.Navigator
-            initialRouteName="Home"
+            initialRouteName={this.state.login?"Profile":"Login"}
             tabBarOptions={{
               activeTintColor: '#e91e63',
             }}>
-            <Tab.Screen
+            {/*<Tab.Screen
               name="Home"
               component={HomeScreen}
               options={{
@@ -170,7 +170,7 @@ class Main extends Component {
                   <MaterialCommunityIcons name="home" color={color} size={size} />
                 ),
               }}
-            />
+            />*/}
             {this.state.login&&
             <Tab.Screen
               name="Chat"
@@ -204,14 +204,23 @@ class Main extends Component {
               }}
             />
             }
+            {/*
             <Tab.Screen
               name="CreatePost"
               component={CreatePostScreen}
             />
+            */}
+            {this.state.login&&
             <Tab.Screen
-            name="Finding"
-            component={FindingScreen}
-          />
+              name="Finding"
+              component={FindingScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="magnify" color={color} size={size} />
+                ),
+              }}
+            />
+            }
             {this.state.login?
               <Tab.Screen
                 name="Profile"
@@ -227,6 +236,11 @@ class Main extends Component {
               name="Login"
               component={LoginAndUpdateScreen}
               initialParams={{login: this.updateLogin}}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialCommunityIcons name="lock-outline" color={color} size={size} />
+                ),
+              }}
               />
             }
           </Tab.Navigator>

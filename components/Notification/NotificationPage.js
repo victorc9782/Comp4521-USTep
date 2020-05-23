@@ -66,7 +66,7 @@ function NotificationPage({ route, navigation, userInfo }) {
                 allUser={userInfo}
                 onAcceptFriendRequest={(item)=>onAcceptFriendRequest(item,myId)}
                 onDeclineFriendRequest={(item)=>removeFriendRequest(item, myId)}
-                onClickUser={(item)=> navigation.navigate("FriendRequest",{ item: item})}
+                onClickUser={(item)=> navigation.navigate("Profile",{ id: item.id})}
             />
         </View>
     );
