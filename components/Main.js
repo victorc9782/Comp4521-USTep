@@ -88,8 +88,9 @@ function ProfileAndUpdateScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} initialParams={{id:auth.currentUser.uid}}/>
-      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} initialParams={{id:auth.currentUser.uid,login: route.params?.login}}/>
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} initialParams={{login: route.params?.login}}/>
+      <Stack.Screen name="Login" component={LoginScreen} initialParams={{login: route.params?.login}}/>
     </Stack.Navigator>
   );
 }
@@ -225,6 +226,7 @@ class Main extends Component {
               <Tab.Screen
                 name="Profile"
                 component={ProfileAndUpdateScreen}
+                initialParams={{login: this.updateLogin}}
                 options={{
                   tabBarIcon: ({ color, size }) => (
                     <MaterialCommunityIcons name="account" color={color} size={size} />

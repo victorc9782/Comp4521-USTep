@@ -146,6 +146,7 @@ export default class UpdateInfoCard extends Component {
             })
             .then(() => {
                 if(this.props.goHome == true) {
+                    this.props.setRefreshTime(new Date().toLocaleTimeString())
                     this.props.navigation.goBack()
                 }else {
                     console.log('-- Finish Creating User --');

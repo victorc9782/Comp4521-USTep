@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
 import { database, storage, auth } from '../../config/config';
+import { Button as But } from 'react-native-elements'
 
 import EditGallery from '../UpdateInfo/EditGallery';
 
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingLeft: '15%',
+        paddingLeft: '22.5%',
         paddingRight: '15%',
         paddingTop: 17.5,
     },
@@ -167,7 +168,13 @@ export const ProfileScreen = ({ route, navigation }) => {
     const [allowEdit, setAllowEdit] = useState(false);
     const [user_id, setUser_id] = useState('');
     const [isUser, setIsUser] = useState(false);
-    
+    const [refresh, setRefresh] = useState("");
+
+    const setRefreshTime = (time) => {
+        setRefresh(time)  
+    }
+    const signOut = route.params?.login
+
     useEffect(() => {
         setAllowEdit(true)
 
@@ -188,8 +195,10 @@ export const ProfileScreen = ({ route, navigation }) => {
                 })
             })
         }
+        
+        console.log("this is refresh : " + refresh)
 
-    }, [route.params?.id]);
+    }, [route.params?.id, refresh]);
 
     return (
         <ScrollView>
@@ -217,18 +226,30 @@ export const ProfileScreen = ({ route, navigation }) => {
                     <Text style={styles.audience}>{data['detail'][2]}  | {num_of_views} views</Text>
                     {   
                         isUser?
+                        <View>
                         <View style={styles.buttonContainer}>
                         <Button
                             title="Update Profile"
                             style={styles.button}
-                            onPress={() => navigation.navigate('UpdateInfo', {uid: user_id, goHome: true})}
+                            onPress={() => navigation.navigate('UpdateInfo', {uid: user_id, goHome: true, setRefreshTime: setRefreshTime})}
                         />
                         <Button
-                            title="EDIT GALLERY"
+                            title="Edit Gallery"
                             style={styles.button}
                             onPress={() => {
                                 setEdit(true)}}
                         />
+                        </View>
+                        <View>
+                        <But
+                            title="Sign out"
+                            style={styles.button}
+                            onPress={() => {
+                                navigation.navigate('Login', {signOut: true})
+                            }}
+                            type="clear"
+                            />
+                        </View>
                         </View>
                         :
                         <View style={styles.buttonContainer}>
@@ -245,7 +266,7 @@ export const ProfileScreen = ({ route, navigation }) => {
                         </View>
                     } 
                     { allowEdit?
-                        <EditGallery gallery={data['gallery']} open={edit} toggleEdit={(e) => {
+                        <EditGallery gallery={data['gallery']} open={edit} refreshTime={refresh} setRefreshTime={setRefreshTime}  toggleEdit={(e) => {
                             setEdit(e)
                         }}/>
                         :

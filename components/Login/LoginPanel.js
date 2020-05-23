@@ -42,7 +42,7 @@ export default class LoginPanel extends Component {
         //updateUser(auth.currentUser);
         console.log(auth.currentUser.uid)
         this.props.updateLogin(true);
-        navigation.navigate('Home');
+        navigation.navigate('Profile', {uid : auth.currentUser.uid});
       })
       .catch( err => {
         this.setState({ error : err.code })
@@ -51,6 +51,11 @@ export default class LoginPanel extends Component {
   }
 
   render() {
+
+    if(this.props.signOut == true) {
+      this.props.updateLogin(false);
+    }
+
     return (
       <View>
         <Input

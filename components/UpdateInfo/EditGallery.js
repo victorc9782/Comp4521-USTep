@@ -34,20 +34,7 @@ const EditGallery = props => {
     const [loading, setLoading] = useState(false);
     const [loadedData, setLoadedData] = useState(false);
     const [uploadImage, setUploadImage] = useState('');
-
-
-    const listEX = [
-        {
-          name: 'Amy Farha',
-          avatar_url: 'https://firebasestorage.googleapis.com/v0/b/comp4521-5739d.appspot.com/o/user%2FMr2kGP1Qa8XE6BvgpEtZMpuEWvs2%2Fgallery%2Fgallery1.jpg?alt=media&token=d00f0f7f-1d76-4c45-8155-c85cd898e644',
-          subtitle: 'Vice President'
-        },
-        {
-          name: 'Chris Jackson',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          subtitle: 'Vice Chairman'
-        },
-    ];
+    const [refreshTime, setRefreshTime] = useState('Never');
 
     const _getPhotoLibrary = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -94,9 +81,13 @@ const EditGallery = props => {
             if(uploadImage != '') {
                 let date = new Date().toLocaleString();
                 await uploadImg(uploadPhotoAsync(uploadImage, '/gallery/' + date  , false))
+                props.setRefreshTime(uploadImage)
+                setRefreshTime(uploadImage)
             }
           }
-          fetchData();
+        if(props.refreshTime != refreshTime) {
+            fetchData();
+        }
     
     }, [props.gallery, uploadImage]);
 

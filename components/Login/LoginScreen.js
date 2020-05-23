@@ -43,10 +43,7 @@ export const LoginScreen = ({ route, navigation }) => {
                 />
             <Text style={styles.title}> Sign In </Text>
             <View style={styles.panel}>
-                <LoginPanel navigation={navigation} updateLogin={route.params?.login}/>
-            </View>
-            <View style={styles.socialMedia}>
-                <SoicalMediaLoginPanel />
+                <LoginPanel navigation={navigation} updateLogin={route.params?.login} signOut={route.params?.signOut}/>
             </View>
         </View>
     );
