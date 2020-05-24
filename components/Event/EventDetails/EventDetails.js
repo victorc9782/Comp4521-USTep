@@ -97,7 +97,7 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => {
-    dispatch(watchUserInfoChange());
+    dispatch(updateUserInfo());
     return {};
 }
 
