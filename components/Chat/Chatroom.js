@@ -18,7 +18,7 @@ export default class Chatroom extends Component {
 
   componentDidMount() {
     this.getChatRecord(this.props.myId, this.props.item)
-    //this._interval = setInterval(()=>{this.getChatRecord(inputChatroomId)},getChatRecordInterval)
+    this._interval = setInterval(()=>{this.getChatRecord(this.props.myId, this.props.item)},getChatRecordInterval)
     
     /*
     this.setState({

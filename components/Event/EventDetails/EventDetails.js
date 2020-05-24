@@ -8,9 +8,8 @@ import { watchUserInfoChange } from '../../../reducers/userInfo';
 import { connect } from 'react-redux';
 
 
-function EventDetails({ userStore, route, navigation }) {
+function EventDetails({ users, route, navigation }) {
     const { event, hostProfileURL } = route.params;
-    const { users, loading } = userStore;
 
     const joinEvent = () => {
         database.ref('/events/' + event.uid + '/participants/' + auth.currentUser.uid).set(true);
@@ -60,7 +59,7 @@ function EventDetails({ userStore, route, navigation }) {
                         }} source={{ uri: hostProfileURL }} />
                     </View>
                     <View style={{ flex: 10 }}>
-                        <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18, textAlignVertical: "center" }}>Hosted by {userStore.users == null ? "" : userStore.users[event.host].name}</Text>
+                        <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18, textAlignVertical: "center" }}>Hosted by {userStore.users == null ? "" : users[event.host].name}</Text>
                     </View>
                 </View>
                 <View style={{ marginTop: Dimensions.get("window").height * 0.035 }}>
@@ -94,7 +93,7 @@ function EventDetails({ userStore, route, navigation }) {
 }
 
 const mapState = state => ({
-    userStore: state.userInfo,
+    users: state.userInfo,
 })
 
 const mapDispatch = dispatch => {
