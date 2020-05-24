@@ -5,7 +5,7 @@ export const UPDATE_USERINFO = 'UPDATE_USERINFO';
 export const fetchUserInfo = (payload) => ({ type: FETCH_USERINFO, payload });
 export const updateUserInfoState = (payload) => ({ type: UPDATE_USERINFO, payload });
 
-export function getUserInfo() {
+/* export function getUserInfo() {
   return dispatch => {
     const users = [];
     database.ref('/users').once('value', (snapshot) => {
@@ -15,7 +15,7 @@ export function getUserInfo() {
             });
     }).then(() => dispatch(fetchUserInfo(users)));
   }
-}
+} */
 
 export function updateUserInfo() {
   return (dispatch) => {
@@ -32,6 +32,9 @@ export function updateUserInfo() {
   }
 }
 
+const initialState = {
+  loading: true,
+}
 
 export function userInfo(state = [], { type, payload }) {
   switch (type) {
