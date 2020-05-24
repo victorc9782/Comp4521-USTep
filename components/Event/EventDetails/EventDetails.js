@@ -4,7 +4,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { translateDateOnEventDetails, translateTimeOnEvent } from '../EventBoard/helperFunctions';
 import { database, auth } from '../../../config/config';
-import { watchUserInfoChange } from '../../../reducers/userInfo';
+import { updateUserInfo } from '../../../reducers/userInfo';
 import { connect } from 'react-redux';
 
 
