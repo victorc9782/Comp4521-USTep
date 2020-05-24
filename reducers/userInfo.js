@@ -32,7 +32,7 @@ const userInfo = (state = initialState, { type, payload }) => {
     case UPDATE_USERINFO:
       return {
         users: payload,
-        loading: false
+        loading: false,
       };
     default:
       return state;

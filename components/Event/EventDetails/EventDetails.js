@@ -60,7 +60,7 @@ function EventDetails({ userStore, route, navigation }) {
                         }} source={{ uri: hostProfileURL }} />
                     </View>
                     <View style={{ flex: 10 }}>
-                        <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18, textAlignVertical: "center" }}>Hosted by {loading ? '' : userStore.users[event.host].name}</Text>
+                        <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18, textAlignVertical: "center" }}>Hosted by {userStore.users == null ? "" : userStore.users[event.host].name}</Text>
                     </View>
                 </View>
                 <View style={{ marginTop: Dimensions.get("window").height * 0.035 }}>
