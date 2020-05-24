@@ -86,7 +86,7 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => {
-    /* dispatch(getEvents()); */
+    dispatch(getEvents());
     dispatch(updateUserInfo());
     return {};
 }
