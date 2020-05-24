@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Text, View, TextInput, FlatList, SafeAreaView, Dimensions } from 'react-native';
-import { ListItem, Button } from 'react-native-elements';
+import { ListItem, Button,Icon } from 'react-native-elements';
 import { database } from '../../config/config';
 
 const windowWidth = Dimensions.get('window').width;
@@ -9,6 +9,9 @@ const windowWidth = Dimensions.get('window').width;
 class ChatroomList extends Component {
   constructor(props) {
     super(props)
+    this.state={
+      showNoFriendNotification: true
+    }
   }
     keyExtractor = (item, index) => index.toString()
     
@@ -22,6 +25,9 @@ class ChatroomList extends Component {
         onPress={()=>{this.props.onClickChatRoomUser(item)}}
       />
     )
+    toggleNotificationStatus(){
+      this.setState({showNoFriendNotification: false})
+    }
   render() {
     if (this.props.userInfo && this.props.userInfo["friends"]){
       console.log("userInfo")
@@ -44,7 +50,20 @@ class ChatroomList extends Component {
     }
     return (
       <SafeAreaView>
-        <Text>You are not having any friends now. Go to meet some new friends.</Text>
+        {this.state.showNoFriendNotification&&
+        <Button
+          title="You are not having any friends now. Go meet some new friends."
+          type="outline"
+          icon={
+            <Icon
+              name='cancel'
+              size={20}
+              color="#2ca7d4"
+            />
+          }
+          onPress={()=>this.toggleNotificationStatus()}
+        />
+        }
       </SafeAreaView>
     );
   }   

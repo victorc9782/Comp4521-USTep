@@ -36,7 +36,6 @@ function ChatroomListPage({ route, navigation, userInfo }) {
                 onClickChatRoomUser={(item)=> navigation.navigate("Chatroom",{ item: item, myId: myId})}
             />
             
-            <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
         </View>
     );
 }
