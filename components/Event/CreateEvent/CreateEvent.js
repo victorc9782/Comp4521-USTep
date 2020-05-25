@@ -94,7 +94,6 @@ export const CreateEvent = ({ route, navigation }) => {
         const retrievedImage = await fetch(image['uri'])
             .then(response => response.blob())
             .then(blob => {
-                console.log(blob.type);
                 return blob;
             });
         const uploadedImageURL = storage.ref('/event/gallery/'

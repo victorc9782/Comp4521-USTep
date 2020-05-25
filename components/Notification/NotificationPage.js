@@ -37,25 +37,25 @@ function becomeFriends(userAid, userBid, chatroomId){
     database.ref('/users/'+userBid+'/friends/'+userAid).set(chatroomId)
 }
 function onAcceptFriendRequest(item ,myId){
-    console.log("onAcceptFriendRequest")
-    console.log(item)
+    /* console.log("onAcceptFriendRequest")
+    console.log(item) */
     var newChatroomId = simpleUniqueId("")
     becomeFriends(myId, item.id, newChatroomId)
     removeFriendRequest(item, myId)
 }
 function removeFriendRequest(item ,myId){
-    console.log("removeFriendRequest")
-    console.log("Remove "+item.id)
+    /* console.log("removeFriendRequest")
+    console.log("Remove "+item.id) */
     database.ref('/users/'+myId+'/friendRequests/'+item.id).remove()
 }
 function NotificationPage({ route, navigation, userInfo }) {
     const myId = route.params?.id 
-    console.log("myId from parms: "+myId)
+    /* console.log("myId from parms: "+myId) */
     const keyExtractor = (item, key) => key.toString();
     const renderItem = ({ item }) => (
         <Text>{item.val()}</Text>
     )
-    console.log("NotificationPage")
+    /* console.log("NotificationPage") */
     /* console.log(userInfo)
     console.log(userInfo[myId]) */
     //console.log(userInfo[myId]["friendRequests"])

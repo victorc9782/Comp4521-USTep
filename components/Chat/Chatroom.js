@@ -41,10 +41,10 @@ export default class Chatroom extends Component {
     clearInterval(this._interval);
   }
   async getChatRecord(myId, item){
-    console.log("getChatRecord")
+/*     console.log("getChatRecord")
     console.log("myId:"+myId)
     console.log("item:"+item)
-    console.log("fdId:"+item.uid)
+    console.log("fdId:"+item.uid) */
     //console.log(new Date);
     let messages = []
     let friendList;

@@ -127,23 +127,23 @@ class Main extends Component {
   async updateUserInfo() {
     const { updateUserInfoHandler } = this.props;
     let userInfo = []
-    console.log("Read /users");
-    console.log(database.ref('/users'));
+    /* console.log("Read /users");
+    console.log(database.ref('/users')); */
     await database.ref('/users').once('value', snap => {
-      console.log(snap);
+      /* console.log(snap); */
       snap.forEach(
         child => {
 
-          console.log(child.val());
+          /* console.log(child.val()); */
           userInfo.push(child.val());
         }
       )
     })
-    console.log("Read /users End");
-    console.log(userInfo)
+    /* console.log("Read /users End");
+    console.log(userInfo) */
     updateUserInfoHandler(userInfo);
-    console.log("Main.js componentDidUpdate after store")
-    console.log(this.props.userInfoStore.userInfo)
+    /* console.log("Main.js componentDidUpdate after store")
+    console.log(this.props.userInfoStore.userInfo) */
   }
   /*
   componentDidMount(){

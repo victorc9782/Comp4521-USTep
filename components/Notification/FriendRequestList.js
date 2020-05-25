@@ -72,13 +72,13 @@ class FriendRequestList extends Component {
   render() {
     const {showNotificationCount} = this.state
       if (this.props.userInfo && this.props.userInfo["friendRequests"]){
-        console.log("Info")
+        /* console.log("Info")
           console.log(this.props.userInfo)
-        console.log("FriendRequestList")
+        console.log("FriendRequestList") */
         var requestList = Object.keys(this.props.userInfo["friendRequests"]).reduce((array, key) => {
             return [...array, {id: key, value: this.props.userInfo["friendRequests"][key], info: this.props.allUser[key]}]
         }, [])
-        console.log(requestList)
+        /* console.log(requestList) */
         return (
           <SafeAreaView>
             {showNotificationCount &&

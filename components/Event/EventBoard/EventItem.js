@@ -68,7 +68,23 @@ const EventItem = ({ users, navigation, event }) => {
                         <Text style={styles.info}>{event.location}</Text>
                     </View>
                     {<View style={styles.wrapper}>
-                        <Image style={styles.avatar} source={{ uri: (users != undefined && users.length > 0) ? '' : users[event.host].avatar_url }} />
+                        <View style={{ flex: 3, }}>
+                            <Image style={styles.avatar} source={{ uri: hostProfileURL }} />
+                        </View>
+
+                        <Text
+                            style={{
+                                borderRadius: 7,
+                                backgroundColor: '#d11f81',
+                                textAlignVertical: "center",
+                                padding: 12,
+                                marginVertical: 10,
+                                color: 'white',
+                                fontWeight: 'bold',
+                                opacity: 0.9,
+                            }}
+                        >Participants: {event.participants ? Object.keys(event.participants).length + 1 : 1}</Text>
+
                     </View>}
                 </View>
             </View>

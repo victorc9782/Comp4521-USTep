@@ -30,7 +30,7 @@ class ChatroomList extends Component {
     }
   render() {
     if (this.props.userInfo && this.props.userInfo["friends"]){
-      console.log(this.props.userInfo)
+      /* console.log(this.props.userInfo) */
     //     console.log(this.props.allUser)
       var requestList = Object.keys(this.props.userInfo["friends"]).reduce((array, key) => {
         return [...array, {id: key, value: this.props.userInfo["friends"][key], info: this.props.allUser[key]}]

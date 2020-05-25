@@ -34,7 +34,7 @@ function EventBoard({ route, navigation, events }) {
             />
             <TouchableOpacity style={
                 {
-                    backgroundColor: "orange",
+                    backgroundColor: "#f2359e",
                     position: "absolute",
                     elevation: 3,
                     width: Dimensions.get("window").width * 0.13,
