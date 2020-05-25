@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Linking } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { translateDateOnEventDetails, translateTimeOnEvent } from '../EventBoard/helperFunctions';
@@ -50,7 +50,10 @@ function EventDetails({ users, route, navigation }) {
                             <MaterialIcon name='location-on' size={38} />
                         </View>
                         <View style={{ flex: 10 }}>
-                            <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18 }}>{event.location}</Text>
+                            {event.live_url == null ? <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18 }}>{event.location}</Text>
+                                : <Text style={{ flex: 5, fontSize: Dimensions.get("window").fontScale * 18, color: '#5aa6ed', textDecorationLine: 'underline' }}
+                                    onPress={() => Linking.openURL(event.live_url)}
+                                >{event.live_url}</Text>}
                         </View>
                     </View>
                     <View style={{

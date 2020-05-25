@@ -65,7 +65,7 @@ const EventItem = ({ users, navigation, event }) => {
                     <Text style={styles.description}>{event.description}</Text>
                     <View style={[styles.wrapper]}>
                         <Text style={styles.info}>{translateDateOnEventBoard(event.startDateTime)} • </Text>
-                        <Text style={styles.info}>{event.location}</Text>
+                        <Text style={styles.info}>{event.location != null ? event.location : 'LIVE'}</Text>
                     </View>
                     {<View style={styles.wrapper}>
                         <View style={{ flex: 3, }}>
