@@ -19,6 +19,7 @@ export function ChatroomPage({ route, navigation }) {
           leftAvatar={{ source: { uri: route.params?.item.info.avatar_url } }}
           bottomDivider
           chevron
+          onPress={(item)=> navigation.navigate("Profile",{ id: route.params?.item.info.uid})}
         />
         <Chatroom
           ChatroomStyle={{width: windowWidth}}

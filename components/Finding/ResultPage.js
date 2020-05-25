@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, View, Text, Image, StyleSheet, FlatList } from 'react-native';
-import { Card, ListItem, Button, Icon, SearchBar } from 'react-native-elements';
+import { Card, ListItem, Button, Icon, SearchBar, Overlay } from 'react-native-elements';
 import ProfileMiniCard from '../Profile/ProfileMiniCard';
 import SearchBarView from './SearchBar';
 import { database, auth } from '../../config/config';
@@ -24,19 +24,41 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     paddingTop: 25,
-  }
+  },
+  overlayBox:{
+	  height: "10%",
+	  borderWidth: 3,
+	  borderRadius: 20,
+	  justifyContent: "center",
+	  alignItems: "center",
+	  borderColor:"#29a2cf"
+	},
+	overlayBoxText:{
+		fontSize: 20,
+		textShadowColor: "#FFFF00",
+		textShadowRadius: 3,
+		color: "#29a2cf"
+	}
 });
 
 
 export const ResultPage = ({ route, navigation }) => {
+  const [visible, setVisible] = useState(false);
 
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
   const sendFriendRequest = (targetUserUID) => {
+	toggleOverlay()
     database.ref('/users/' + auth.currentUser.uid).child('/friends/' + targetUserUID).set(true)
     database.ref('/users/' + targetUserUID + '/friendRequests/' + auth.currentUser.uid).set(true)
   }
 
   return (
     <ScrollView>
+		<Overlay isVisible={visible} onBackdropPress={toggleOverlay} overlayStyle={styles.overlayBox}>
+			<Text style={styles.overlayBoxText}>New Friend Request Sent!</Text>
+		</Overlay>
       <View style={styles.contentContainer}>
         <View style={styles.searchBar}>
           <SearchBarView navigation={navigation} />

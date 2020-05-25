@@ -17,7 +17,6 @@ import { ChatroomPage } from './Chat/ChatroomPage'
 import { Event } from './Event/Event'
 
 import NotificationPage from './Notification/NotificationPage'
-import FriendRequestPage from './Notification/FriendRequestPage'
 
 import { ResultPage } from './Finding/ResultPage'
 import { MatchPage } from './Finding/MatchPage'
@@ -38,6 +37,7 @@ function ChatScreen({ navigation, route }) {
     <Stack.Navigator>
       <Stack.Screen name="Friend List" component={ChatroomListPage} initialParams={{id:auth.currentUser.uid}}/>
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }
