@@ -36,7 +36,7 @@ function ChatScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator>
-      <Stack.Screen name="ChatroomList" component={ChatroomListPage} initialParams={{id:auth.currentUser.uid}}/>
+      <Stack.Screen name="Friend List" component={ChatroomListPage} initialParams={{id:auth.currentUser.uid}}/>
       <Stack.Screen name="Chatroom" component={ChatroomPage} />
     </Stack.Navigator>
   );

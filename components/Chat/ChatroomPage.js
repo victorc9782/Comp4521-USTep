@@ -29,7 +29,6 @@ export function ChatroomPage({ route, navigation }) {
         {
           Platform.OS === 'android' && <KeyboardAvoidingView behavior="padding" />
         }
-        <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
       </SafeAreaView>
       
     );
