@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Linking, Alert } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { translateDateOnEventDetails, translateTimeOnEvent } from '../EventBoard/helperFunctions';
@@ -12,10 +12,37 @@ import ParticipantPile from './ParticipantPile';
 function EventDetails({ users, route, navigation }) {
     const { event, hostProfileURL } = route.params;
 
+	const [joinedThisEvent, setJoinedThisEvent] = useState(false);
     const joinEvent = () => {
         database.ref('/events/' + event.uid + '/participants/' + auth.currentUser.uid).set(true);
+		Alert.alert("Join Event", 
+		"You have successfully joined the event: "+event.eventName,
+		[
+			{ text: "I will arrive on time", onPress: () => console.log("OK Pressed") }
+		]
+		)
+		navigation.navigate("Event Board")
     }
-
+    const leaveEvent = () => {
+        database.ref('/events/' + event.uid + '/participants/' + auth.currentUser.uid).remove();
+		Alert.alert("Leave Event", 
+		"You have left the event: "+event.eventName,
+		
+		[
+			{ text: "I will join next time", onPress: () => console.log("OK Pressed") }
+		]
+		)
+		navigation.navigate("Event Board")
+    }
+	if (event.participants && !joinedThisEvent){
+        participant_uids = Object.keys(event.participants);
+		for (let i = 0; i < participant_uids.length; i++) {
+			if (auth.currentUser.uid == participant_uids[i]){
+				setJoinedThisEvent(true)
+				break;
+			}
+		}
+	}
     return (
         <>
             <ScrollView style={{
@@ -94,7 +121,7 @@ function EventDetails({ users, route, navigation }) {
                     </View>
                 </View>
             </ScrollView>
-            {event.host != auth.currentUser.uid && <TouchableOpacity
+            {event.host != auth.currentUser.uid && !joinedThisEvent && <TouchableOpacity
                 style={{
                     position: "absolute",
                     elevation: 4,
@@ -112,7 +139,28 @@ function EventDetails({ users, route, navigation }) {
                     color: 'white',
                     fontSize: Dimensions.get("window").fontScale * 18,
                     fontWeight: '500',
-                }}>Join</Text></TouchableOpacity>}
+                }}>Join</Text></TouchableOpacity>
+			}
+			{event.host != auth.currentUser.uid && joinedThisEvent && <TouchableOpacity
+                style={{
+                    position: "absolute",
+                    elevation: 4,
+                    shadowOpacity: 1,
+                    bottom: 0,
+                    width: '100%',
+                    backgroundColor: 'grey',
+                    height: Dimensions.get("window").height * 0.07,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+                onPress={() => leaveEvent()}
+            ><Text
+                style={{
+                    color: 'white',
+                    fontSize: Dimensions.get("window").fontScale * 18,
+                    fontWeight: '500',
+                }}>Leave</Text></TouchableOpacity>
+			}
         </>)
 
 }
