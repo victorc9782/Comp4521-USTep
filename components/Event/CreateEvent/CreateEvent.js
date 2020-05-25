@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Dimensions, Platform, Button } from 'react-native';
+import { View, Text, ScrollView, Dimensions, Platform, Button, Image, ToastAndroid, ToolbarAndroid } from 'react-native';
 import { Input } from 'react-native-elements';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import * as ImagePicker from 'expo-image-picker';
 import { translateDateOnCreateEvent, translateTimeOnEvent } from '../EventBoard/helperFunctions';
-import { database, auth } from '../../../config/config';
+import { database, auth, storage } from '../../../config/config';
+
 
 export const CreateEvent = ({ route, navigation }) => {
 
@@ -20,6 +22,8 @@ export const CreateEvent = ({ route, navigation }) => {
     const [target, setTarget] = useState(null);
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+/*     const [imageURL, setImageURL] = useState(null); */
+    const [image, setImage] = useState(require('../../../assets/wallpaper12.jpg'))
 
     const showMode = currentMode => {
         setShow(true);
@@ -45,8 +49,16 @@ export const CreateEvent = ({ route, navigation }) => {
         }
     }
 
-    const postEvent = () => {
+    const showToastWithGravityAndOffset = () => {
+        ToastAndroid.showWithGravityAndOffset("Event created!",
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            0, Dimensions.get("window").height * 0.3)
+    }
+
+    const postEvent = async () => {
         const uid = new Date().toJSON().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+        const imageURL = await uploadImage();
         database.ref('/events/' + uid).set({
             startDateTime: startDateTime.toJSON(),
             endDateTime: endDateTime.toJSON(),
@@ -55,24 +67,68 @@ export const CreateEvent = ({ route, navigation }) => {
             host: auth.currentUser.uid,
             description: description,
             uid: uid,
+            image_url: imageURL,
         })
+        navigation.navigate('Event Board')
+        showToastWithGravityAndOffset()
+    }
+
+
+    const pickImage = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [16, 9],
+                quality: 1,
+            })
+            if (!result.cancelled) {
+                setImage({ uri: result.uri });
+            }
+        } catch (error) {
+            console.log(error);
+        };
+    }
+
+    const uploadImage = async () => {
+        const retrievedImage = await fetch(image['uri'])
+            .then(response => response.blob())
+            .then(blob => {
+                console.log(blob.type);
+                return blob;
+            });
+        const uploadedImageURL = storage.ref('/event/gallery/'
+            + new Date().toLocaleString()).put(retrievedImage)
+            .then(snapshot => snapshot.ref.getDownloadURL()
+                .then(downloadURL => {
+                    return downloadURL;
+                }));
+
+        return uploadedImageURL;
     }
 
     return (
         <>
             <ScrollView style={{
                 elevation: 4,
-                marginVertical: Dimensions.get('window').height * 0.03,
+                marginVertical: Dimensions.get('window').height * 0.015,
                 marginHorizontal: Dimensions.get('window').width * 0.03,
-                paddingVertical: Dimensions.get('window').height * 0.02,
                 paddingHorizontal: Dimensions.get('window').height * 0.02,
                 borderRadius: Dimensions.get('window').scale * 2,
                 backgroundColor: 'white',
-            }}>
-                <Input placeholder='Event Name'
+            }}
+                contentContainerStyle={{ paddingVertical: Dimensions.get('window').height * 0.02, }}
+            >
+
+                <TouchableOpacity style={{ marginVertical: Dimensions.get("window").height * 0.02, }} onPress={() => { pickImage() }}>
+                    <Image source={image} style={{ width: '100%', height: Dimensions.get('window').height * 0.3, opacity: 0.85 }} resizeMode='cover' />
+                </TouchableOpacity>
+
+                <Input
+                    placeholder='Event Name'
                     onChangeText={value => setEventName(value)}
                 />
-                <View style={{ paddingHorizontal: Dimensions.get('window').height * 0.01 }}>
+                <View style={{ marginTop: Dimensions.get("window").height * 0.02, paddingHorizontal: Dimensions.get('window').height * 0.01 }}>
                     <View style={{ width: '100%', flexDirection: "row", height: Dimensions.get('window').height * 0.07 }}>
                         <View style={{ flex: 1.5, justifyContent: "center" }}>
                             <MaterialIcon name='access-time' size={Dimensions.get("window").scale * 10} />
@@ -107,6 +163,8 @@ export const CreateEvent = ({ route, navigation }) => {
                 <Input placeholder='Location'
                     onChangeText={value => setLocation(value)} />
                 <Input placeholder='Details'
+                    multiline={true}
+                    style={{ marginTop: Dimensions.get("window").height * 0.2 }}
                     onChangeText={value => setDescription(value)} />
                 <View style={{ paddingHorizontal: Dimensions.get('window').height * 0.01 }}>
                     <TouchableOpacity style={{

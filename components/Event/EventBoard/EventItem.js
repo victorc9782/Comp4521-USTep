@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, Text, Dimensions, TouchableOpacity } from "react-native";
 import { translateDateOnEventBoard } from './helperFunctions';
-import { storage } from '../../../config/config';
+import { storage, auth } from '../../../config/config';
+import { updateUserInfo } from '../../../reducers/userInfo';
+import { connect } from 'react-redux';
 
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const EventItem = ({ navigation, event }) => {
+const EventItem = ({ users, navigation, event }) => {
 
     const [hostProfileURL, setHostProfileURL] = useState(null);
 
@@ -55,9 +57,8 @@ const EventItem = ({ navigation, event }) => {
         )
     }, [])
 
-
     return (
-        <TouchableOpacity onPress={() => { navigation.navigate('Event Details', { event: event, hostProfileURL }) }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Event Details', { event, hostProfileURL }) }}>
             <View style={styles.container}>
                 <View style={styles.container_text}>
                     <Text style={styles.title}>{event.eventName}</Text>
@@ -67,7 +68,7 @@ const EventItem = ({ navigation, event }) => {
                         <Text style={styles.info}>{event.location}</Text>
                     </View>
                     {<View style={styles.wrapper}>
-                        <Image style={styles.avatar} source={{ uri: hostProfileURL }} />
+                        <Image style={styles.avatar} source={{ uri: (users != undefined && users.length > 0) ? '' : users[event.host].avatar_url }} />
                     </View>}
                 </View>
             </View>
@@ -75,5 +76,13 @@ const EventItem = ({ navigation, event }) => {
     )
 }
 
+const mapState = state => ({
+    users: state.userInfo,
+})
 
-export default EventItem;
+const mapDispatch = dispatch => {
+    dispatch(updateUserInfo());
+    return {};
+}
+
+export default connect(mapState, mapDispatch)(EventItem);

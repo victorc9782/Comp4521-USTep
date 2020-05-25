@@ -5908,6 +5908,11 @@ react-native-elements@^1.2.7:
     react-native-ratings "^6.3.0"
     react-native-status-bar-height "^2.2.0"
 
+react-native-face-pile@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-face-pile/-/react-native-face-pile-1.9.0.tgz#2c58254273932ee61138c45d79a2a0ac9644b2de"
+  integrity sha512-q9nzn0Eh14gGAmLKUc4PC40MV3u9hA1BcVlF8LbGZ8ybVDxaaWdjRPAdGEqPiS6FS+0s82D/aqD/EzyZVat9ug==
+
 react-native-gesture-handler@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"

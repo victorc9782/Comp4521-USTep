@@ -56,8 +56,8 @@ function NotificationPage({ route, navigation, userInfo }) {
         <Text>{item.val()}</Text>
     )
     console.log("NotificationPage")
-    console.log(userInfo)
-    console.log(userInfo[myId])
+    /* console.log(userInfo)
+    console.log(userInfo[myId]) */
     //console.log(userInfo[myId]["friendRequests"])
     return (
         <View style={styles.container}>

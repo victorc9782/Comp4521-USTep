@@ -22,9 +22,9 @@ function ChatroomListPage({ route, navigation, userInfo }) {
     const renderItem = ({ item }) => (
         <Text>{item.val()}</Text>
     )
-    console.log("ChatroomListPage")
+    /* console.log("ChatroomListPage")
     console.log(userInfo)
-    console.log(userInfo[myId])
+    console.log(userInfo[myId]) */
     //console.log(userInfo[myId]["friendRequests"])
     return (
         <View style={styles.container}>
