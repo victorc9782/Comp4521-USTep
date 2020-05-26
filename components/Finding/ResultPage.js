@@ -50,7 +50,7 @@ export const ResultPage = ({ route, navigation }) => {
   };
   const sendFriendRequest = (targetUserUID) => {
 	toggleOverlay()
-    database.ref('/users/' + auth.currentUser.uid).child('/friends/' + targetUserUID).set(true)
+    //database.ref('/users/' + auth.currentUser.uid).child('/friends/' + targetUserUID).set(true)
     database.ref('/users/' + targetUserUID + '/friendRequests/' + auth.currentUser.uid).set(true)
   }
 
