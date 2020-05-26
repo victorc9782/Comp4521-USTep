@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Linking, Alert } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-import { translateDateOnEventDetails, translateTimeOnEvent } from '../EventBoard/helperFunctions';
-import { database, auth, storage } from '../../../config/config';
+import { translateDateOnEventDetails, translateTimeOnEvent } from '../helperFunctions';
+import { database, auth } from '../../../config/config';
 import { updateUserInfo } from '../../../reducers/userInfo';
 import { connect } from 'react-redux';
 import ParticipantPile from './ParticipantPile';
@@ -12,37 +12,37 @@ import ParticipantPile from './ParticipantPile';
 function EventDetails({ users, route, navigation }) {
     const { event, hostProfileURL } = route.params;
 
-	const [joinedThisEvent, setJoinedThisEvent] = useState(false);
+    const [joinedThisEvent, setJoinedThisEvent] = useState(false);
     const joinEvent = () => {
         database.ref('/events/' + event.uid + '/participants/' + auth.currentUser.uid).set(true);
-		Alert.alert("Join Event", 
-		"You have successfully joined the event: "+event.eventName,
-		[
-			{ text: "I will arrive on time", onPress: () => console.log("OK Pressed") }
-		]
-		)
-		navigation.navigate("Event Board")
+        Alert.alert("Join Event",
+            "You have successfully joined the event: " + event.eventName,
+            [
+                { text: "I will arrive on time", onPress: () => console.log("OK Pressed") }
+            ]
+        )
+        navigation.navigate("Event Board")
     }
     const leaveEvent = () => {
         database.ref('/events/' + event.uid + '/participants/' + auth.currentUser.uid).remove();
-		Alert.alert("Leave Event", 
-		"You have left the event: "+event.eventName,
-		
-		[
-			{ text: "I will join next time", onPress: () => console.log("OK Pressed") }
-		]
-		)
-		navigation.navigate("Event Board")
+        Alert.alert("Leave Event",
+            "You have left the event: " + event.eventName,
+
+            [
+                { text: "I will join next time", onPress: () => console.log("OK Pressed") }
+            ]
+        )
+        navigation.navigate("Event Board")
     }
-	if (event.participants && !joinedThisEvent){
+    if (event.participants && !joinedThisEvent) {
         participant_uids = Object.keys(event.participants);
-		for (let i = 0; i < participant_uids.length; i++) {
-			if (auth.currentUser.uid == participant_uids[i]){
-				setJoinedThisEvent(true)
-				break;
-			}
-		}
-	}
+        for (let i = 0; i < participant_uids.length; i++) {
+            if (auth.currentUser.uid == participant_uids[i]) {
+                setJoinedThisEvent(true)
+                break;
+            }
+        }
+    }
     return (
         <>
             <ScrollView style={{
@@ -140,8 +140,8 @@ function EventDetails({ users, route, navigation }) {
                     fontSize: Dimensions.get("window").fontScale * 18,
                     fontWeight: '500',
                 }}>Join</Text></TouchableOpacity>
-			}
-			{event.host != auth.currentUser.uid && joinedThisEvent && <TouchableOpacity
+            }
+            {event.host != auth.currentUser.uid && joinedThisEvent && <TouchableOpacity
                 style={{
                     position: "absolute",
                     elevation: 4,
@@ -160,7 +160,7 @@ function EventDetails({ users, route, navigation }) {
                     fontSize: Dimensions.get("window").fontScale * 18,
                     fontWeight: '500',
                 }}>Leave</Text></TouchableOpacity>
-			}
+            }
         </>)
 
 }

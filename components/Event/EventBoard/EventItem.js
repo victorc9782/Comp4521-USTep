@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, Text, Dimensions, TouchableOpacity } from "react-native";
-import { translateDateOnEventBoard } from './helperFunctions';
-import { storage, auth } from '../../../config/config';
+import { translateDateOnEventBoard } from '../helperFunctions';
+import { storage } from '../../../config/config';
 import { updateUserInfo } from '../../../reducers/userInfo';
 import { connect } from 'react-redux';
 

@@ -5,7 +5,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
-import { translateDateOnCreateEvent, translateTimeOnEvent } from '../EventBoard/helperFunctions';
+import { translateDateOnCreateEvent, translateTimeOnEvent } from '../helperFunctions';
 import { database, auth, storage } from '../../../config/config';
 
 

@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet, FlatList, View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
 import EventItem from './EventItem';
-import EventFilter from './EventFilter';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { watchEventsChanged, getEvents } from '../../../reducers/events'
-import { database } from '../../../config/config';
 import { connect } from 'react-redux';
 
 
