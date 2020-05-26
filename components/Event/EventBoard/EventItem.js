@@ -1,3 +1,9 @@
+/*
+#COMP 4521 
+#Chu Chun Wai 20344464 cwvchu@connect.ust.hk
+#Yip Pak Kin 20360422 pkyipab@connect.ust.hk
+#Man Ho Yin 20306137 hymanae@connect.ust.hk
+*/
 import React, { useEffect, useState } from 'react'
 import { View, Image, StyleSheet, Text, Dimensions, TouchableOpacity } from "react-native";
 import { translateDateOnEventBoard } from '../helperFunctions';

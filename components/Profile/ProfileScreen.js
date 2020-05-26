@@ -1,3 +1,9 @@
+/*
+#COMP 4521 
+#Chu Chun Wai 20344464 cwvchu@connect.ust.hk
+#Yip Pak Kin 20360422 pkyipab@connect.ust.hk
+#Man Ho Yin 20306137 hymanae@connect.ust.hk
+*/
 import React, { useState, useEffect, Component } from 'react';
 import { ScrollView, View,Text, Button, Image, StyleSheet, FlatList, ActivityIndicator, Dimensions } from 'react-native'
 import { database, storage, auth } from '../../config/config';

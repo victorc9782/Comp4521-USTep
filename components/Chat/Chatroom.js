@@ -1,3 +1,10 @@
+/*
+#COMP 4521 
+#Chu Chun Wai 20344464 cwvchu@connect.ust.hk
+#Yip Pak Kin 20360422 pkyipab@connect.ust.hk
+#Man Ho Yin 20306137 hymanae@connect.ust.hk
+*/
+
 import React, { Component } from 'react';
 import { Text, View, TextInput, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat'
