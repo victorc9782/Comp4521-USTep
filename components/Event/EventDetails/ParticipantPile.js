@@ -31,13 +31,11 @@ function ParticipantPile({ participants, users }) {
         flexDirection: 'row',
         marginTop: Dimensions.get("window").height * 0.02,
     }}>
-        <View style={{ flex: 2 }}>
-            <FacePile
-                numFaces={4}
-                faces={avatars}
-                hideOverflow={false}
-                circleSize={Dimensions.get("window").width * 0.07} />
-        </View>
+        <FacePile style={{ flex: 2 }}
+            numFaces={4}
+            faces={avatars}
+            hideOverflow={false}
+            circleSize={Dimensions.get("window").width * 0.07} />
         <Text style={{
             flex: 8, textAlign: 'right',
             textAlignVertical: 'center',
