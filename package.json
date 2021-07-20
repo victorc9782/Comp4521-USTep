@@ -18,7 +18,7 @@
     "expo-permissions": "^8.1.0",
     "firebase": "7.14.0",
     "react": "~16.9.0",
-    "react-native": "~0.61.4",
+    "react-native": "~0.62.3",
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^1.2.7",
     "react-native-face-pile": "^1.9.0",
